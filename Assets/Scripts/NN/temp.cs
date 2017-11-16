@@ -7,25 +7,19 @@ public class temp : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		int[] hidden = new int[1];
-		hidden[0] = 3;
-		// hidden[1] = 1;
+		Matrix P = Matrix.Parse("0 0 1 1\r\n0 1 0 1");
+		Matrix T = Matrix.Parse("0 1 1 0\r\n0 1 0 1");
+		Matrix Pr = Matrix.Parse("0\r\n1");
 
-		Matrix P = Matrix.Parse("4 2 -1\r\n0.01 -1 3.5\r\n0.01 2 0.01\r\n-1 2.5 -2\r\n-1.5 2 1.5");
-		// Debug.Log(P.ToString());
-		Matrix T = Matrix.IdentityMatrix(3,3);
-		// Matrix T = Matrix.Parse("1 0 0 1\r\n0 1 0 0\r\n0 0 1 0");
-		Debug.Log(T.ToString());
-		
-        var nn = new NeuralNetwork(5,hidden);
-		Debug.Log(nn.Run(P).ToString());
-		nn.Learn(P,T,100);
-		Debug.Log(nn.Run(P).ToString());
+		int[] layers = new int[2];
+		// layers[0] = 20;
+		layers[0] = 2;
+		layers[1] = 2;		
+        var nn = new NeuralNetwork(2, layers);
 
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
+		Debug.Log(nn.Run(Pr).ToString());
+		nn.Learn(P,T,1);
+		Debug.Log(nn.Run(Pr).ToString());
+
 	}
 }

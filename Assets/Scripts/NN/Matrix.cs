@@ -188,6 +188,34 @@ public class Matrix
         return matrix;
     }
 
+
+    public static Matrix RemoveCol(Matrix m, int k){
+        Matrix n = new Matrix(m.rows, m.cols-1);
+        for(int i = 0; i < n.rows; i++){
+            for(int j = 0; j < n.cols; j++){
+                if(j >= k){
+                    n[i,j] = m[i,j+1];
+                } else {
+                    n[i,j] = m[i,j];
+                }
+            }
+        }
+        return n;
+    }
+
+    public static Matrix RemoveRow(Matrix m, int k){
+        Matrix n = new Matrix(m.rows-1, m.cols);
+        for(int i = 0; i < n.rows; i++){
+            for(int j = 0; j < n.cols; j++){
+                if(i >= k){
+                    n[i,j] = m[i+1,j];
+                } else {
+                    n[i,j] = m[i,j];
+                }
+            }
+        }
+        return n;
+    }
     public static Matrix SubsForth(Matrix A, Matrix b)          // Function solves Ax = b for A as a lower triangular matrix
     {
         if (A.L == null) A.MakeLU();
