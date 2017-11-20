@@ -71,16 +71,21 @@ public class NeuralNetwork{
 
             // ===== Error and back propagation algorithm =====
             Matrix delta = Matrix.Parse(anwser) - signals[nl]; 
-            Matrix error = delta.Duplicate();                    
+            Matrix error = delta.Duplicate();
 
-            // for(int k = 0; k < nl+1; k++)
-            //     Debug.Log("signal " + k + "\r\n" + signals[k].ToString());
             for(int k = 0; k < nl; k++){
-                signal = signals[nl - k]; // signal Y2 na start
+                signal = signals[nl - k]; // signal Y2 na start    
+                if(signal.rows > error.rows){
+                    signal = Matrix.RemoveRow(signal, 0);
+                }             
+                
+                // Debug.Log("signal rows: " + signal.rows + " cols " + signal.cols);
+                // Debug.Log("error rows: " + error.rows + " cols " + error.cols + "\r\n" + error.ToString()); 
+                // Debug.Log("delta rows: " + delta.rows + " cols " + delta.cols + "\r\n" + delta.ToString());
 
-                for(int i = 0; i < delta.rows; i++){
-                    for(int j = 0; j < delta.cols; j++){
-                        error[i,j] = delta[i,j] * beta * signal[i,j] * (1 - signal[i,j]); // czy obliczam poprawnie błąd
+                for(int i = 0; i < error.rows; i++){
+                    for(int j = 0; j < error.cols; j++){
+                        error[i,j] = delta[i,j] * beta * signal[i,j] * (1 - signal[i,j]);
                     }
                 }
 
@@ -88,10 +93,7 @@ public class NeuralNetwork{
                 // Debug.Log("dnn rows: " + dnn.rows + " cols " + dnn.cols + "\r\n" + dnn.ToString());    
                 // Debug.Log("nn rows " + nn[nl - 1 - k].rows + " cols " + nn[nl - 1 - k].cols + "\r\n" + nn[nl-1-k].ToString());                            
                 nn[nl - 1 - k] += dnn; 
-                  
-                // Debug.Log("signal rows: " + signal.rows + " cols " + signal.cols);
-                // if(k == 0){}
-                // Debug.Log("error rows: " + error.rows + " cols " + error.cols + "\r\n" + error.ToString());     
+                      
 
                 delta = Matrix.RemoveRow(nn[nl - 1 - k], 0) * error; // backpropagation
                 error = delta.Duplicate();
@@ -99,6 +101,10 @@ public class NeuralNetwork{
             // ================================================
         }
     }
+
+    // private Matrix Error(){
+        
+    // }
 
     public Matrix Run(Matrix signal, int index){
         // Debug.Log("-1\r\n" + signal.ToString());

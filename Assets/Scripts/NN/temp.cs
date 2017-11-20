@@ -15,12 +15,12 @@ public class temp : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-		int[] layers = new int[2];
-		layers[0] = 2;
-		layers[1] = 1;
-		// layers[2] = 1;		
+		int[] layers = new int[3];
+		layers[0] = 8;
+		layers[1] = 4;
+		layers[2] = 1;		
 		nn = new NeuralNetwork(2, layers);		
-				
+
 
 		Debug.Log("Before learning");
 		Debug.Log("Correct: 0, Network response: " + nn.Run(Matrix.Parse("0\r\n0")).ToString());
@@ -42,7 +42,7 @@ public class temp : MonoBehaviour {
 	}
 
 	public void Learn(){
-		nn.Learn(P,T,10000);
+		nn.Learn(P,T,40000);
 		Debug.Log("After learning");
 		Debug.Log("Correct: 0, Network response: " + nn.Run(Matrix.Parse("0\r\n0")).ToString());
 		Debug.Log("Correct: 1, Network response: " + nn.Run(Matrix.Parse("1\r\n0")).ToString());
