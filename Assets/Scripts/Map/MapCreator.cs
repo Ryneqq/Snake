@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class MapCreator : MonoBehaviour {
-    public Vector2 mapSize;
-    public float fieldSize;
     public Transform plane;
     public Transform wall;
+    private Vector2 mapSize;
+    private float fieldSize;
     private int x, y;
 
 	void Awake () {
@@ -18,11 +18,10 @@ public class MapCreator : MonoBehaviour {
 
     private void Setup()
     {
-        // count fields on both axis
-        x = Mathf.RoundToInt(mapSize.x / fieldSize);
-        y = Mathf.RoundToInt(mapSize.y / fieldSize);
-        // scale plane up to the mapSize
-        plane.localScale = new Vector3(mapSize.x / 10, 1, mapSize.y / 10);
+        x = 20;
+        y = 20;
+        fieldSize = 0.40f;
+        mapSize = new Vector2(8,8);
     }
 
     private void CreateEmpty()
@@ -32,14 +31,14 @@ public class MapCreator : MonoBehaviour {
         Vector2 actual = new Vector2(start.x, start.y); // copy
 
         // creating map
-        GameMode.map = new Field[x, y];
+        Map.map = new Field[x, y];
         for (int i = 0; i < x; i++)
         {
             for (int j = 0; j < y; j++)
             {
-                GameMode.map[i, j] = new Field();
-                GameMode.map[i, j].pos = actual;
-                GameMode.map[i, j].x = i; GameMode.map[i, j].y = j;   
+                Map.map[i, j] = new Field();
+                Map.map[i, j].pos = actual;
+                Map.map[i, j].x = i; Map.map[i, j].y = j;   
                 actual.y += fieldSize;
             }
             actual.x += fieldSize;
@@ -52,24 +51,25 @@ public class MapCreator : MonoBehaviour {
         // walls around the map
         for (int i = 0; i < x; i++)
         {
-            GameMode.map[i, 0].field = GameMode.Fields.wall;
-            GameMode.map[i, y-1].field = GameMode.Fields.wall;
+            Map.map[i, 0].field = Map.Fields.wall;
+            Map.map[i, y-1].field = Map.Fields.wall;
         }
         for (int j = 0; j < y; j++)
         {
-            GameMode.map[0, j].field = GameMode.Fields.wall;
-            GameMode.map[x-1, j].field = GameMode.Fields.wall;
+            Map.map[0, j].field = Map.Fields.wall;
+            Map.map[x-1, j].field = Map.Fields.wall;
         }
     }
 
     private void Spawn()
     {
         Transform tempField;
-        foreach (var m in GameMode.map)
+        foreach (var m in Map.map)
         {
-            if(m.field == GameMode.Fields.wall)
+            if(m.field == Map.Fields.wall)
             {
-                tempField = Instantiate(wall, new Vector3(m.pos.x, fieldSize/2, m.pos.y), Quaternion.identity);
+                m.walkable = false;
+                tempField = Instantiate(wall, new Vector2(m.pos.x, m.pos.y), Quaternion.identity);
                 tempField.SetParent(plane);
             }
         }

@@ -6,7 +6,7 @@ using UnityEngine;
 /// Class tracks informations about one separte field.
 /// </summary>
 public class Field { 
-    public GameMode.Fields field;
+    public Map.Fields field;
     public Vector2 pos; // position in the world
     public int x, y; // position in the map
 	public int h, g; // movement costs
@@ -19,13 +19,20 @@ public class Field {
 
     public Field()
     {
-        field = GameMode.Fields.empty;
+        field = Map.Fields.empty;
         walkable = true;
     }
-
-    public bool IsEmpty()
+    public void ChangeField(Map.Fields _field){
+        field = _field;
+        if(field == Map.Fields.empty || field == Map.Fields.food){
+            walkable = true;
+        }  else {
+            walkable = false;
+        }
+    }
+    public bool IsWalkable()
     {
-        if (field == GameMode.Fields.empty)
+        if (field == Map.Fields.empty || field == Map.Fields.food)
         {
             return true;
         }

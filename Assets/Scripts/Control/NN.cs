@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // klasa do testowania działania klasy NeuralNetwork
-public class temp : MonoBehaviour {
-
+public class NN : MonoBehaviour {
+	public Transform snake;
 	Matrix P = Matrix.Parse("0 0 1 1\r\n0 1 0 1");
 	Matrix T = Matrix.Parse("0 1 1 0");
-	Matrix Pr = Matrix.Parse("1\r\n0");
 	NeuralNetwork nn;
 	
 
 
 	// Use this for initialization
 	void Start () {
+
 
 		int[] layers = new int[3];
 		layers[0] = 8;
@@ -48,5 +48,13 @@ public class temp : MonoBehaviour {
 		Debug.Log("Correct: 1, Network response: " + nn.Run(Matrix.Parse("1\r\n0")).ToString());
 		Debug.Log("Correct: 1, Network response: " + nn.Run(Matrix.Parse("0\r\n1")).ToString());		
 		Debug.Log("Correct: 0, Network response: " + nn.Run(Matrix.Parse("1\r\n1")).ToString());
+		nn.SaveNeuralNetwork();
+		nn.LoadNeuralNetwork();
+		Debug.Log("After loading");
+		Debug.Log("Correct: 0, Network response: " + nn.Run(Matrix.Parse("0\r\n0")).ToString());
+		Debug.Log("Correct: 1, Network response: " + nn.Run(Matrix.Parse("1\r\n0")).ToString());
+		Debug.Log("Correct: 1, Network response: " + nn.Run(Matrix.Parse("0\r\n1")).ToString());		
+		Debug.Log("Correct: 0, Network response: " + nn.Run(Matrix.Parse("1\r\n1")).ToString());
+		
 	}
 }
