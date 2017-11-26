@@ -15,7 +15,7 @@ public class Snake : MonoBehaviour {
 		tailTransforms = new List<Transform>();
 		frames = new List<string>();		
 		dir = Vector2.right;
-		Create(Map.map[10,10], 4);
+		Create(Map.map[4,4], 4);
 		dir = Vector2.left;
 	}
 
@@ -38,7 +38,43 @@ public class Snake : MonoBehaviour {
 			return;
 		if(dir.x == -_dir.x && dir.y == _dir.y)
 			return;
-		dir = _dir;
+		if(_dir.x == 0 && _dir.y == 0)
+			return;
+		if(_dir.x == 0 || _dir.y == 0)
+			dir = _dir;
+	}
+
+	public void Turn(string side){
+
+		if(side == "right"){
+			if(dir.x == 1){
+				dir.x = 0;
+				dir.y = -1;
+			} else if (dir.x == -1) {
+				dir.x = 0;
+				dir.y = 1;
+			} else if (dir.y == 1){
+				dir.x = 1;
+				dir.y = 0;
+			} else {
+				dir.x = -1;
+				dir.y = 0;
+			}
+		} else {
+			if(dir.x == 1){
+				dir.x = 0;
+				dir.y = 1;
+			} else if (dir.x == -1) {
+				dir.x = 0;
+				dir.y = -1;
+			} else if (dir.y == 1){
+				dir.x = -1;
+				dir.y = 0;
+			} else {
+				dir.x = 1;
+				dir.y = 0;
+			}
+		}
 	}
 
 	private void Move() {
@@ -47,6 +83,7 @@ public class Snake : MonoBehaviour {
 		Field next = Map.map[tail[0].x + x, tail[0].y + y];
 		if(!next.IsWalkable()){
 			//dead
+			Debug.Log("dead");
 			return;
 		}
 
@@ -82,6 +119,8 @@ public class Snake : MonoBehaviour {
 
 	private void Register(){
 		Matrix _map = new Matrix(Map.map.GetLength(0) * Map.map.GetLength(1), 1);
+		// Matrix _map = new Matrix(Map.map.GetLength(0), Map.map.GetLength(1));
+
 		Matrix _dir = new Matrix(2,1);
 		int k = 0;
 		for(int i = 0; i < Map.map.GetLength(0); i++){

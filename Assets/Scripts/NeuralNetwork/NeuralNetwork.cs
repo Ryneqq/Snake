@@ -5,8 +5,6 @@ using UnityEngine;
 /// Small and simple Neural Network library
 /// </summary>
 public class NeuralNetwork{
-    // private int inputs;
-    // private int[] layers;
     private Matrix[] nn;
 
     private int beta = 5;
@@ -15,10 +13,8 @@ public class NeuralNetwork{
     /// Constructor takes number of inputs and an array of numbers of neurons in each layer.
     /// Initialize neural network with random wages.
     /// </summary>
+    public NeuralNetwork(){}
     public NeuralNetwork(int inputs, int[] layers){
-        // inputs = _inputs;
-        // layers = _layers;
-
         nn = new Matrix[layers.Length];
         nn[0] = Matrix.RandomMatrix(inputs + 1, layers[0], 0.1f);    
         for(int i = 1; i < layers.Length; i++){
@@ -33,16 +29,18 @@ public class NeuralNetwork{
     }
 
     /// <summary>
-    /// Under work
+    /// Teach your neural network by example.
     /// </summary>
-    // IN:
-    // OUT:
+    // IN: P - example input, T - example output, n - how many times repeat learning
+
     public void Learn(Matrix P, Matrix T, int n){
         int examples = P.cols; // n.o. examples
         int nl = nn.Length; // n.o. layers
-        float lr = .05f; // learning rate
+        float lr = .1f; // learning rate
 
         for(int l = 0; l < n; l++){
+            // Debug.Log((l*100)/n + "%");
+            // Console.WriteLine((l*100)/n + "%");
             // ============= Choosing an example ==============
             int next = UnityEngine.Random.Range(0, examples);
             string example = String.Empty;
@@ -108,7 +106,11 @@ public class NeuralNetwork{
 
     private Matrix Run(Matrix signal, int index){
         // Debug.Log("-1\r\n" + signal.ToString());
-         Matrix X = Matrix.Parse("-1\r\n" + signal.ToString()); // adding bias      
+        Matrix X = Matrix.Parse("-1\r\n" + signal.ToString()); // adding bias      
+        // Matrix X = new Matrix(signal.rows + 1, 1);
+        // for(int i = 0; i < signal.rows; i++){
+        //         X[i+1,0] = signal[i,0];
+        // }
         // Debug.Log("index: " + index +"\r\n\r\n" +
         //             nn[index].ToString() + "\r\n\r\n" +
         //             "nn rows: " + nn[index].rows + " nn cols: " + nn[index].cols);

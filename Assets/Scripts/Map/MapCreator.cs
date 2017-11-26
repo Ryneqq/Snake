@@ -16,16 +16,14 @@ public class MapCreator : MonoBehaviour {
         Spawn();
 	}
 
-    private void Setup()
-    {
-        x = 20;
-        y = 20;
-        fieldSize = 0.40f;
+    private void Setup() {
+        x = 10;
+        y = 10;
+        fieldSize = 0.8f;
         mapSize = new Vector2(8,8);
     }
 
-    private void CreateEmpty()
-    {
+    private void CreateEmpty() {
         // position
         Vector2 start = new Vector2((mapSize.x - fieldSize) / (-2), (mapSize.y - fieldSize) / (-2)); // top-left corrner
         Vector2 actual = new Vector2(start.x, start.y); // copy
