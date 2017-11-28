@@ -26,4 +26,8 @@ public class Food : MonoBehaviour {
 		Destroy(food.gameObject);
 		Spawn();
 	}
+
+	public Vector2 Position(){
+		return food.position;
+	}
 }

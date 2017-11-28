@@ -9,6 +9,7 @@ public class Snake : MonoBehaviour {
 	List<Transform> tailTransforms;
 	List<string> frames;
 	Vector2 dir;
+	public int fitness;
 
 	void Start(){
 		tail = new List<Field>();
@@ -83,16 +84,19 @@ public class Snake : MonoBehaviour {
 		Field next = Map.map[tail[0].x + x, tail[0].y + y];
 		if(!next.IsWalkable()){
 			//dead
+			// Destroy(this.gameObject);
 			Debug.Log("dead");
 			return;
 		}
 
 		if(next.field != Map.Fields.food) {
 			Map.map[tail[last].x, tail[last].y].ChangeField(Map.Fields.empty);
+			fitness++;
 		} else {
 			food.Eat();
 			Spawn(tail[last].pos);
 			x = tail[last].x; y = tail[last].y;
+			fitness += 10;
 		}	
 
 		for(int i = last; i > 0; i--){
@@ -141,5 +145,11 @@ public class Snake : MonoBehaviour {
 			content += frame;
 		}
 		Save.ToFile("game", content);
+	}
+	public Vector2 Dir(){
+		return dir;
+	}
+	public Field Head(){
+		return tail[0];
 	}
 }
