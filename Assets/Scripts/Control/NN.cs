@@ -59,46 +59,24 @@ public class NN : MonoBehaviour {
 		examples = true;
 	}
 
-	private void Steer(){
-		Matrix perceptiont = new Matrix(6, 1);
-		int x,y;
-		snake.Turn("right");
-		x = (int)snake.Dir().x; y = (int)snake.Dir().y;
-		perceptiont[0,0] = (int)Map.map[snake.Head().x + x, snake.Head().y + y].field;
-		snake.Turn("left");
-		x = (int)snake.Dir().x; y = (int)snake.Dir().y;		
-		perceptiont[2,0] = (int)Map.map[snake.Head().x + x, snake.Head().y + y].field;
-		snake.Turn("left");
-		x = (int)snake.Dir().x; y = (int)snake.Dir().y;		
-		perceptiont[4,0] = (int)Map.map[snake.Head().x + x, snake.Head().y + y].field;
-		snake.Turn("right");
-		x = snake.Head().x + (int)snake.Dir().x; 
-		y = snake.Head().y + (int)snake.Dir().y;
-		snake.Turn("right");
-		x += (int)snake.Dir().x; y += (int)snake.Dir().y;
-		perceptiont[1,0] = (int)Map.map[x,y].field; 
-		x -= (int)snake.Dir().x; y -= (int)snake.Dir().y;
-		snake.Turn("left");
-		snake.Turn("left");
-		x += (int)snake.Dir().x; y += (int)snake.Dir().y;		
-		perceptiont[3,0] = 	(int)Map.map[x,y].field;
-		snake.Turn("right");
-
-		if(distance > Vector2.Distance(snake.Head().pos, snake.food.Position())){
-			perceptiont[5,0] = -1;
+	private int CheckIfApproachingToFood (float current, float previous) {
+		if(previous > current){
+			return -1;
 		} else {
-			perceptiont[5,0] = 1;
+			return 1;
 		}
-		distance =  Vector2.Distance(snake.Head().pos, snake.food.Position());
-		// network doesn't really get it how to go through 3 and not through 2 and 1
-		for(int i = 0; i < perceptiont.rows; i++){
-			if(perceptiont[i,0] == 3){
-				perceptiont[i,0] = -1;
-				Debug.Log("zamienilem");
+	}
+
+	private void ChangePerceptionOfTheFood(Matrix perception) {
+		for(int i = 0; i < perception.rows; i++){
+			if(perception[i,0] == 3){
+				perception[i,0] = -1;
 			}
 		}
+	}
 
-		Matrix dir = nn.Run(perceptiont);
+	private void ChangeDirection(Matrix perception) {
+		Matrix dir = nn.Run(perception);
 		if(dir[0,0] > .5f && dir[1,0] < .5f){
 			snake.Turn("right");
 		} else if(dir[0,0] < .5f && dir[1,0] > .5f){
@@ -106,5 +84,42 @@ public class NN : MonoBehaviour {
 		}
 	
 		Debug.Log(dir.ToString());
+	}
+
+	private void CreatePerception(Matrix perception) {
+		int x,y;
+
+		snake.Turn("right");
+		x = (int)snake.Dir().x; y = (int)snake.Dir().y;
+		perception[0,0] = (int)Map.map[snake.Head().x + x, snake.Head().y + y].field;
+		snake.Turn("left");
+		x = (int)snake.Dir().x; y = (int)snake.Dir().y;		
+		perception[2,0] = (int)Map.map[snake.Head().x + x, snake.Head().y + y].field;
+		snake.Turn("left");
+		x = (int)snake.Dir().x; y = (int)snake.Dir().y;		
+		perception[4,0] = (int)Map.map[snake.Head().x + x, snake.Head().y + y].field;
+		snake.Turn("right");
+		x = snake.Head().x + (int)snake.Dir().x; 
+		y = snake.Head().y + (int)snake.Dir().y;
+		snake.Turn("right");
+		x += (int)snake.Dir().x; y += (int)snake.Dir().y;
+		perception[1,0] = (int)Map.map[x,y].field; 
+		x -= (int)snake.Dir().x; y -= (int)snake.Dir().y;
+		snake.Turn("left");
+		snake.Turn("left");
+		x += (int)snake.Dir().x; y += (int)snake.Dir().y;		
+		perception[3,0] = 	(int)Map.map[x,y].field;
+		snake.Turn("right");
+
+		var next = Vector2.Distance(snake.Head().pos, snake.food.Position());
+		perception[5,0] = CheckIfApproachingToFood(distance, next);
+		distance = next;
+	}
+
+	private void Steer(){
+		Matrix perception = new Matrix(6, 1);
+		CreatePerception(perception);
+		ChangePerceptionOfTheFood(perception);
+		ChangeDirection(perception);
 	}
 }
