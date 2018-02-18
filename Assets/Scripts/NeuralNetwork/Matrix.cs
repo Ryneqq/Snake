@@ -73,6 +73,13 @@ public class Matrix
         return m;
     }
 
+    public Matrix GetRow(int k)
+    {
+        Matrix m = new Matrix(1, cols);
+        for (int i = 0; i < cols; i++) m[i, 0] = mat[k, i];
+        return m;
+    }
+
     public void SetCol(Matrix v, int k)
     {
         for (int i = 0; i < rows; i++) mat[i, k] = v[i, 0];

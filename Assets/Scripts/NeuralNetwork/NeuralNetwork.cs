@@ -4,132 +4,121 @@ using UnityEngine;
 /// <summary>
 /// Small and simple Neural Network library
 /// </summary>
-public class NeuralNetwork{
+public class NeuralNetwork {
     private Matrix[] nn;
-
     private int beta = 5;
+
+    public NeuralNetwork() {}
 
     /// <summary>
     /// Constructor takes number of inputs and an array of numbers of neurons in each layer.
     /// Initialize neural network with random wages.
     /// </summary>
-    public NeuralNetwork(){}
-    public NeuralNetwork(int inputs, int[] layers){
+    public NeuralNetwork(int inputs, int[] layers) {
         nn = new Matrix[layers.Length];
-        nn[0] = Matrix.RandomMatrix(inputs + 1, layers[0], 0.1f);    
+        nn[0] = Matrix.RandomMatrix(inputs + 1, layers[0], 0.1f);
         for(int i = 1; i < layers.Length; i++){
-            nn[i] = Matrix.RandomMatrix(layers[i-1] + 1, layers[i], 0.1f);                 
+            nn[i] = Matrix.RandomMatrix(layers[i-1] + 1, layers[i], 0.1f);
         } 
+    }
 
-        // Display your nn
-        // for(int i = 0; i < nn.Length; i++){
-        //     Debug.Log("layer " + i + " rows: " + nn[i].rows + " cols: " + nn[i].cols);     
-        //     Debug.Log(nn[i].ToString());                  
-        // }
+    public void Display() {
+        for(int i = 0; i < nn.Length; i++) {
+            Debug.Log("layer " + i + " rows: " + nn[i].rows + " cols: " + nn[i].cols);
+            Debug.Log(nn[i].ToString());
+        }
+    }
+
+    Matrix AddBias(Matrix signal) {
+        return Matrix.Parse("-1\r\n" + signal.ToString());
+    }
+
+    Matrix RemoveBias(Matrix signal) {
+        return Matrix.RemoveRow(signal, 0);
+    }
+
+    Matrix ChooseExample(Matrix examples, int example) {
+        return examples.GetCol(example);
+    }
+
+    Matrix GetAnwser(Matrix anwsers, int example) {
+        return anwsers.GetCol(example);
+    }
+
+    Matrix FindError(Matrix signal, Matrix delta) {
+        Matrix error = delta.Duplicate(); // to have the same dimensions
+        for(int i = 0; i < error.rows; i++){
+            for(int j = 0; j < error.cols; j++){
+                error[i,j] = delta[i,j] * beta * signal[i,j] * (1 - signal[i,j]);
+            }
+        }
+        return error;
+    }
+
+    void BackPropagation(Matrix[] signals, Matrix delta, int layers) {
+        Matrix signal;
+        float learningRate = .05f; // learning rate
+
+        for(int i = layers; i > 0; i--) {
+            signal = signals[i];
+            if(signal.rows > delta.rows)
+                signal = RemoveBias(signal); // remove bias if needed
+
+            Matrix error = FindError(signal, delta);
+
+            Matrix dnn = learningRate * signals[i-1] * Matrix.Transpose(error); // delta of nn weights
+            nn[i-1] += dnn; // adjust weights in neural network
+
+            delta = RemoveBias(nn[i-1]) * error; // delta for previous layer
+        }
     }
 
     /// <summary>
     /// Teach your neural network by example.
     /// </summary>
     // IN: P - example input, T - example output, n - how many times repeat learning
+    public void Learn(Matrix P, Matrix T, int n) {
+        int example = 0;
+        int layers = nn.Length; // number of layers
 
-    public void Learn(Matrix P, Matrix T, int n){
-        int examples = P.cols; // n.o. examples
-        int nl = nn.Length; // n.o. layers
-        float lr = .1f; // learning rate
-
-        for(int l = 0; l < n; l++){
-            // Debug.Log((l*100)/n + "%");
-            // Console.WriteLine((l*100)/n + "%");
-            // ============= Choosing an example ==============
-            int next = UnityEngine.Random.Range(0, examples);
-            string example = String.Empty;
-            for(int i = 0; i < P.rows; i++)
-                example += P[i,next] + "\r\n";
-            Matrix signal = Matrix.Parse(example); 
-            // Debug.Log("example: " + example);
-            // ================================================
-            
-            // ==== Signal running through neural network =====
-            Matrix[] signals = new Matrix[nl+1];
-            signals[0] = Matrix.Parse("-1\r\n" + signal.ToString()); // bias
- 
-            for(int i = 0; i < nl; i++) {
-                signal = Run(signal, i);
-                if(i == nl - 1)
-                    signals[i+1] = signal;   
-                else
-                    signals[i+1] = Matrix.Parse("-1\r\n" + signal.ToString());    
-            // TODO: think about adding Matrix method, ToString() is cutting informations                                                  
-            }              
-            // ================================================
-
-            // ================ Correct anwser ================
-            string anwser = String.Empty;
-            for(int i = 0; i < T.rows; i++)
-                anwser += T[i,next] + "\r\n";
-            // Debug.Log("anwser: " + anwser);
-            // ================================================            
-
-            // ===== Error and back propagation algorithm =====
-            Matrix delta = Matrix.Parse(anwser) - signals[nl]; 
-            Matrix error = delta.Duplicate(); // to have the same dimensions
-
-            for(int k = 0; k < nl; k++){
-                signal = signals[nl - k];
-                if(signal.rows > error.rows){
-                    signal = Matrix.RemoveRow(signal, 0); // remove bias if needed
-                }             
-                
-                // Debug.Log("signal rows: " + signal.rows + " cols " + signal.cols);
-                // Debug.Log("delta rows: " + delta.rows + " cols " + delta.cols + "\r\n" + delta.ToString());
-                // Debug.Log("error rows: " + error.rows + " cols " + error.cols + "\r\n" + error.ToString());
-
-                for(int i = 0; i < error.rows; i++){
-                    for(int j = 0; j < error.cols; j++){
-                        error[i,j] = delta[i,j] * beta * signal[i,j] * (1 - signal[i,j]); // for sigmoid activation function
-                    }
-                }
-
-                Matrix dnn = lr * signals[nl - 1 - k] * Matrix.Transpose(error);
-                // Debug.Log("dnn rows: " + dnn.rows + " cols " + dnn.cols + "\r\n" + dnn.ToString());    
-                // Debug.Log("nn rows " + nn[nl - 1 - k].rows + " cols " + nn[nl - 1 - k].cols + "\r\n" + nn[nl-1-k].ToString());                            
-                nn[nl - 1 - k] += dnn; 
-                      
-
-                delta = Matrix.RemoveRow(nn[nl - 1 - k], 0) * error; // backpropagation
-                error = delta.Duplicate(); // same dimensions
-            }
-            // ================================================
+        for(int i = 0; i < n; i++) {
+            example = UnityEngine.Random.Range(0, P.cols);
+            Matrix signal = ChooseExample(P, example);
+            Matrix[] signals = RunAndReturnSignals(signal, layers);
+            Matrix delta = GetAnwser(T, example) - signals[layers];
+            BackPropagation(signals, delta, layers);
         }
     }
 
-    private Matrix Run(Matrix signal, int index){
-        // Debug.Log("-1\r\n" + signal.ToString());
-        Matrix X = Matrix.Parse("-1\r\n" + signal.ToString()); // adding bias      
-        // Matrix X = new Matrix(signal.rows + 1, 1);
-        // for(int i = 0; i < signal.rows; i++){
-        //         X[i+1,0] = signal[i,0];
-        // }
-        // Debug.Log("index: " + index +"\r\n\r\n" +
-        //             nn[index].ToString() + "\r\n\r\n" +
-        //             "nn rows: " + nn[index].rows + " nn cols: " + nn[index].cols);
-
-        // Debug.Log(X.ToString() + "\r\n\r\n" + "signal rows: " + X.rows + " nn cols: " + X.cols);
+    Matrix Run(Matrix signal, int index) {
+        Matrix X = AddBias(signal);
         Matrix U = Matrix.Transpose(nn[index]) * X;
-        return ActivationFunction(U);  
+        return ActivationFunction(U);
     }
     
-    public Matrix Run(Matrix signal){
+    public Matrix Run(Matrix signal) {
         for(int i = 0; i < nn.Length-1; i++){
-            signal = Run(signal, i);             
+            signal = Run(signal, i);
         }
         return Run(signal, nn.Length-1);
     }
 
-    private Matrix ActivationFunction(Matrix U){
-        // sigmoid:
-        // 1/(1+exp(-beta*U))
+    Matrix[] RunAndReturnSignals(Matrix signal, int layers) {
+        Matrix[] signals = new Matrix[layers+1];
+        signals[0] = AddBias(signal);
+
+        for(int i = 0; i < layers; i++) {
+            signal = Run(signal, i);
+            if(i == layers - 1)
+                signals[i+1] = signal;
+            else
+                signals[i+1] = AddBias(signal);
+        }
+        return signals;
+    }
+
+    Matrix ActivationFunction(Matrix U) {
+        // sigmoid: 1/(1+exp(-beta*U))
         Matrix Y = U.Duplicate();
         for(int i = 0; i < Y.rows; i++){
             for(int j = 0; j < Y.cols; j++){
@@ -138,38 +127,25 @@ public class NeuralNetwork{
         }
         return Y;
     }
-    
-    private Matrix ActivationFunction2(Matrix U){
-        // ReLU
-        Matrix Y = U.Duplicate(); // its already Y(k,l) = U(k,l);
-        for(int i = 0; i < Y.rows; i++){
-            for(int j = 0; j < Y.cols; j++){
-                if(U[i,j] < 0)
-                    Y[i,j] = 0;
-            }
-        }
-        return Y;
-    }
 
-    public void SaveNeuralNetwork(){
+    public void SaveNeuralNetwork() {
         string network = String.Empty;
         for(int i = 0; i < nn.Length; i++) {
             if( i > 0)
-                network += ";";            
+                network += ";";
             network += nn[i].ToString();
         }
         Save.ToFile("nn", network);
     }
 
-    public void LoadNeuralNetwork(){
+    public void LoadNeuralNetwork() {
         if(!Load.CheckForFile("nn"))
             return;
         string loaded = Load.FromFile("nn");
         string[] network = loaded.Split(';');
 
         nn = new Matrix[network.Length];
-        for(int i = 0; i < network.Length; i++){
-            nn[i] = Matrix.Parse(network[i]);                 
-        } 
+        for(int i = 0; i < network.Length; i++)
+            nn[i] = Matrix.Parse(network[i]);
     }
 }

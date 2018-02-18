@@ -9,34 +9,40 @@ public class NN : MonoBehaviour {
 	Matrix T; // correct resposes
 	bool create = true; // shall we create new nn
 	bool examples = false; // examples were loaded from file
-	float distance;
+	float distance = 10f;
 	
 
 
 	// Use this for initialization
 	void Start() {
 		snake = GetComponent<Snake>();
-		distance = 10f;
 		if(create){
-			int[] layers = new int[3];
-			layers[0] = 8;
-			layers[1] = 4;
-			layers[2] = 2;		
-			nn = new NeuralNetwork(6, layers);	
-			Learn();	
+			CreateNeuralNetwork();
 		} else {
-			nn = new NeuralNetwork();
-			nn.LoadNeuralNetwork();
-			Debug.Log("NN loaded");			
+			LoadNeuralNetwork();
 		}
 		InvokeRepeating("Steer", .3f, .3f);
+	}
+
+	private void CreateNeuralNetwork() {
+		int[] layers = new int[3];
+		layers[0] = 8;
+		layers[1] = 4;
+		layers[2] = 2;
+		nn = new NeuralNetwork(6, layers);
+		Learn();
+	}
+
+	private void LoadNeuralNetwork() {
+		nn = new NeuralNetwork();
+		nn.LoadNeuralNetwork();
 	}
 
 	public void Learn() {
 		if(!examples) {
 			LoadExamples();
 		}
-		nn.Learn(P, T, 50000);
+		nn.Learn(P, T, 10000);
 		nn.SaveNeuralNetwork(); // to tylko odpalić dla najlepszego snake'a
 	}
 
@@ -93,10 +99,10 @@ public class NN : MonoBehaviour {
 		x = (int)snake.Dir().x; y = (int)snake.Dir().y;
 		perception[0,0] = (int)Map.map[snake.Head().x + x, snake.Head().y + y].field;
 		snake.Turn("left");
-		x = (int)snake.Dir().x; y = (int)snake.Dir().y;		
+		x = (int)snake.Dir().x; y = (int)snake.Dir().y;
 		perception[2,0] = (int)Map.map[snake.Head().x + x, snake.Head().y + y].field;
 		snake.Turn("left");
-		x = (int)snake.Dir().x; y = (int)snake.Dir().y;		
+		x = (int)snake.Dir().x; y = (int)snake.Dir().y;
 		perception[4,0] = (int)Map.map[snake.Head().x + x, snake.Head().y + y].field;
 		snake.Turn("right");
 		x = snake.Head().x + (int)snake.Dir().x; 
@@ -107,7 +113,7 @@ public class NN : MonoBehaviour {
 		x -= (int)snake.Dir().x; y -= (int)snake.Dir().y;
 		snake.Turn("left");
 		snake.Turn("left");
-		x += (int)snake.Dir().x; y += (int)snake.Dir().y;		
+		x += (int)snake.Dir().x; y += (int)snake.Dir().y;
 		perception[3,0] = 	(int)Map.map[x,y].field;
 		snake.Turn("right");
 
