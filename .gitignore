@@ -32,3 +32,9 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+
+# Personal
+*.asset
+.vscode/
+ProjectSettings/
+UnityPackageManager/
