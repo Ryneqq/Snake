@@ -54,7 +54,7 @@ public class Snake : MonoBehaviour {
         else if(dir.y == 1)
             return Side.up;
         else
-            return Side.left;
+            return Side.down;
     }
 
     public void Turn(string side){

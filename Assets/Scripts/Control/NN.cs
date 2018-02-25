@@ -7,7 +7,7 @@ public class NN : MonoBehaviour {
     NeuralNetwork nn;
     Matrix P; // examples
     Matrix T; // correct resposes
-    bool create = true; // shall we create new nn
+    bool create = false; // shall we create new nn
     bool examples = false; // examples were loaded from file
     float distance = 10f;
 
@@ -63,10 +63,14 @@ public class NN : MonoBehaviour {
         examples = true;
     }
 
-    private int CheckIfApproachingToFood (float current, float previous) {
-        if(previous > current){
+    private int ApproachToFood () {
+        var actual = Vector2.Distance(snake.Head().pos, snake.food.Position());
+
+        if(distance >= actual){
+            distance = actual;
             return -1;
         } else {
+            distance = actual;
             return 1;
         }
     }
@@ -90,19 +94,39 @@ public class NN : MonoBehaviour {
         Debug.Log(dir.ToString());
     }
 
-    private void GetView(){
-        int x,y;
-        var dir = snake.Dir();
+    private Matrix GetView() {
         var pos = snake.Head();
+        Matrix view = new Matrix(3,3);
 
+        for(int i = -1; i <= 1; i++)
+            for(int j = -1; j <= 1; j++)
+                view[i+1, j+1] = (int)Map.map[pos.x + i, pos.y + j].field;
 
-
-
+        return view;
     }
 
-    private void CreatePerception(Matrix perception) {
-        int x,y;
+    private Matrix TurnView(Matrix view) {
+        var dir = snake.Direction();
 
+        switch (dir) {
+            case Snake.Side.right: 
+                view = Matrix.Transpose(view);
+                break;
+            case Snake.Side.down: 
+                view = Matrix.SwitchRows(view, 0, 2);
+                break;
+            case Snake.Side.left: 
+                view = Matrix.SwitchRows(view, 0, 2);
+                view = Matrix.Transpose(view);
+                break;
+            default: break;
+        }
+        return view;
+    }
+
+    private Matrix CreatePerception() {
+        var perception = new Matrix(6, 1);
+        int x, y;
         snake.Turn("right");
         x = (int)snake.Dir().x; y = (int)snake.Dir().y;
         perception[0,0] = (int)Map.map[snake.Head().x + x, snake.Head().y + y].field;
@@ -122,17 +146,35 @@ public class NN : MonoBehaviour {
         snake.Turn("left");
         snake.Turn("left");
         x += (int)snake.Dir().x; y += (int)snake.Dir().y;
-        perception[3,0] = 	(int)Map.map[x,y].field;
+        perception[3,0] = (int)Map.map[x,y].field;
         snake.Turn("right");
+        perception[5,0] = ApproachToFood();
 
-        var actual = Vector2.Distance(snake.Head().pos, snake.food.Position());
-        perception[5,0] = CheckIfApproachingToFood(distance, actual);
-        distance = actual;
+        return perception;
+    }
+
+    private Matrix CreatePerception2() {
+        var view = TurnView(GetView());
+        view = Matrix.RemoveRow(view, 2);
+
+        Debug.Log(view.ToString());
+
+        var perception = new Matrix(6, 1);
+
+        perception[0,0] = view[1,2];
+        perception[1,0] = view[0,2];
+        perception[2,0] = view[0,1];
+        perception[3,0] = view[0,0];
+        perception[4,0] = view[1,0];
+        perception[5,0] = ApproachToFood();
+
+        return perception;
     }
 
     private void Steer(){
-        Matrix perception = new Matrix(6, 1);
-        CreatePerception(perception);
+        // Debug.Log(CreatePerception().ToString());
+        // Debug.Log(CreatePerception2().ToString());
+        Matrix perception = CreatePerception();
         ChangePerceptionOfTheFood(perception);
         ChangeDirection(perception);
     }

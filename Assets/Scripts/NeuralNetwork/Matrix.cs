@@ -85,6 +85,16 @@ public class Matrix
         for (int i = 0; i < rows; i++) mat[i, k] = v[i, 0];
     }
 
+    public static Matrix SwitchRows(Matrix v, int k, int l)
+    {
+        Matrix m = v.Duplicate();
+        for(int i = 0; i < m.cols; i++) {
+            m[i,k] = v[i,l];
+            m[i,l] = v[i,k];
+        }
+        return m;
+    }
+
     public void MakeLU()                        // Function for LU decomposition
     {
         if (!IsSquare()) throw new MException("The matrix is not square!");
@@ -293,7 +303,7 @@ public class Matrix
                 for (int j = 0; j < nums.Length; j++) matrix[i, j] = double.Parse(nums[j]);
             }
         }
-        catch (FormatException exc) { throw new MException("Wrong input format!"); }
+        catch (FormatException) { throw new MException("Wrong input format!"); }
         return matrix;
     }
 
