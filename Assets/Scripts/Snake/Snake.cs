@@ -5,19 +5,20 @@ using UnityEngine;
 public class Snake : MonoBehaviour {
     public Transform tailPrefab;
     public Food food;
+    public int x,y;
+    public int length;
+    public Color color;
     List<Field> tail;
     List<Transform> tailTransforms;
     List<string> frames;
     Vector2 dir;
-    public int fitness;
-    public enum Side { left, right, up, down };
 
     void Start(){
         tail = new List<Field>();
         tailTransforms = new List<Transform>();
         frames = new List<string>();
         dir = Vector2.right;
-        Create(Map.map[4,4], 4);
+        Create(Map.map[x,y], length);
         dir = Vector2.left;
     }
 
@@ -44,17 +45,6 @@ public class Snake : MonoBehaviour {
             return;
         if(_dir.x == 0 || _dir.y == 0)
             dir = _dir;
-    }
-
-    public Side Direction (){
-        if(dir.x == 1)
-            return Side.right;
-        else if(dir.x == -1)
-            return Side.left;
-        else if(dir.y == 1)
-            return Side.up;
-        else
-            return Side.down;
     }
 
     public void Turn(string side){
@@ -103,13 +93,11 @@ public class Snake : MonoBehaviour {
 
         if(next.field != Map.Fields.food) {
             Map.map[tail[last].x, tail[last].y].ChangeField(Map.Fields.empty);
-            fitness++;
         } else {
             food.Eat();
             Spawn(tail[last].pos);
             x = tail[last].x; y = tail[last].y;
-            fitness += 10;
-        }	
+        }
 
         for(int i = last; i > 0; i--){
             tail[i] = tail[i-1];
@@ -126,9 +114,15 @@ public class Snake : MonoBehaviour {
         }
     }
 
+    private void ChangeColor(Transform t) {
+        t.GetComponent<SpriteRenderer>().color = color;
+        color = Color.Lerp(color, Color.white, .15f);
+    }
+
     private void Spawn(Vector2 pos){
         Transform temp = Instantiate(tailPrefab, pos, Quaternion.identity);
         temp.transform.SetParent(GetComponent<Transform>(), false);
+        ChangeColor(temp);
         tailTransforms.Add(temp);
     }
 

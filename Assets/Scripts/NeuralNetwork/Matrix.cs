@@ -89,8 +89,8 @@ public class Matrix
     {
         Matrix m = v.Duplicate();
         for(int i = 0; i < m.cols; i++) {
-            m[i,k] = v[i,l];
-            m[i,l] = v[i,k];
+            m[k,i] = v[l,i];
+            m[l,i] = v[k,i];
         }
         return m;
     }

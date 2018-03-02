@@ -184,6 +184,7 @@ Transform:
   m_Children:
   - {fileID: 631985085}
   - {fileID: 1553467722}
+  - {fileID: 1986016028}
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -212,7 +213,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 440162902}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 346, y: -194, z: 0}
+  m_LocalPosition: {x: 346, y: -196, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 956673391}
@@ -382,7 +383,7 @@ GameObject:
   - component: {fileID: 631985086}
   - component: {fileID: 631985087}
   m_Layer: 0
-  m_Name: Snake
+  m_Name: NN Snake
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -414,7 +415,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tailPrefab: {fileID: 4537449436637464, guid: ee30dedd9acb92f40b3e48a98cb96beb, type: 2}
   food: {fileID: 1553467723}
-  fitness: 0
+  x: 4
+  y: 4
+  length: 4
+  color: {r: 0.032439426, g: 0.6713398, b: 0.88235295, a: 1}
 --- !u!114 &631985087
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -508,7 +512,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 796066391}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 436, y: 214, z: 0}
+  m_LocalPosition: {x: 436, y: 216, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 440162903}
@@ -694,7 +698,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1547679978}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 346, y: -154, z: 0}
+  m_LocalPosition: {x: 346, y: -156, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1432219332}
@@ -937,7 +941,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a37b9fc1202d5e441a140bf5f0980796, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  snake: {fileID: 631985086}
 --- !u!1 &1887253318
 GameObject:
   m_ObjectHideFlags: 0
@@ -1052,3 +1055,61 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   plane: {fileID: 363747360}
   wall: {fileID: 4537449436637464, guid: ee30dedd9acb92f40b3e48a98cb96beb, type: 2}
+--- !u!1 &1986016027
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1986016028}
+  - component: {fileID: 1986016030}
+  - component: {fileID: 1986016029}
+  m_Layer: 0
+  m_Name: Player Snake
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1986016028
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1986016027}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.25, y: 0.25, z: 1}
+  m_Children: []
+  m_Father: {fileID: 363747360}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1986016029
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1986016027}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a37b9fc1202d5e441a140bf5f0980796, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1986016030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1986016027}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e95719e6d2d21904489db6572ce49c95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tailPrefab: {fileID: 4537449436637464, guid: ee30dedd9acb92f40b3e48a98cb96beb, type: 2}
+  food: {fileID: 1553467723}
+  x: 4
+  y: 6
+  length: 4
+  color: {r: 0.65517235, g: 0, b: 1, a: 1}

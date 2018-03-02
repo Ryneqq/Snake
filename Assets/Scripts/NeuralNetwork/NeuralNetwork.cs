@@ -8,7 +8,7 @@ public class NeuralNetwork {
     private Matrix[] nn;
     private int beta = 5;
 
-    public NeuralNetwork() {}
+    NeuralNetwork() {}
 
     /// <summary>
     /// Constructor takes number of inputs and an array of numbers of neurons in each layer.
@@ -138,14 +138,16 @@ public class NeuralNetwork {
         Save.ToFile("nn", network);
     }
 
-    public void LoadNeuralNetwork() {
+    public static NeuralNetwork LoadNeuralNetwork() {
+        var nnet = new NeuralNetwork(); 
         if(!Load.CheckForFile("nn"))
-            return;
+            throw new AccessViolationException("File not found");
         string loaded = Load.FromFile("nn");
         string[] network = loaded.Split(';');
 
-        nn = new Matrix[network.Length];
+        nnet.nn = new Matrix[network.Length];
         for(int i = 0; i < network.Length; i++)
-            nn[i] = Matrix.Parse(network[i]);
+            nnet.nn[i] = Matrix.Parse(network[i]);
+        return nnet;
     }
 }
