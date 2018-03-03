@@ -10,19 +10,17 @@ public class Snake : MonoBehaviour {
     public Color color;
     List<Field> tail;
     List<Transform> tailTransforms;
-    List<string> frames;
     Vector2 dir;
 
     void Start(){
         tail = new List<Field>();
         tailTransforms = new List<Transform>();
-        frames = new List<string>();
         dir = Vector2.right;
         Create(Map.map[x,y], length);
         dir = Vector2.left;
     }
 
-    public void Create (Field head, int length) {
+    private void Create (Field head, int length) {
         int x = (int)dir.x, y = (int)dir.y;
         tail.Add(head);
         for(int i = 1; i < length; i++){

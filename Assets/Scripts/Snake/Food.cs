@@ -10,7 +10,7 @@ using UnityEngine;
         Spawn();
     }
 
-    private void Spawn () {
+    private Vector2 FindEmptyField() {
         int x = 0, y = 0;
         while(!Map.map[x,y].IsWalkable()){
             if(Map.map[x,y].field == Map.Fields.food)
@@ -20,8 +20,13 @@ using UnityEngine;
         }
         Map.map[x,y].ChangeField(Map.Fields.food);
 
-        food = Instantiate(foodPrefab, Map.map[x,y].pos, Quaternion.identity);
+        return Map.map[x,y].pos;
+    }
+
+    private void Spawn () {
+        food = Instantiate(foodPrefab, FindEmptyField(), Quaternion.identity);
         food.transform.SetParent(GetComponent<Transform>(), false);
+        food.GetComponent<SpriteRenderer>().color = Color.green;
     }
 
     public void Eat(){

@@ -17,10 +17,10 @@ public class MapCreator : MonoBehaviour {
 	}
 
     private void Setup() {
-        x = 10;
-        y = 10;
+        x = 40;
+        y = 40;
         fieldSize = 0.8f;
-        mapSize = new Vector2(8,8);
+        mapSize = new Vector2(32,32);
     }
 
     private void CreateEmpty() {

@@ -1,16 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Player : MonoBehaviour {
     Snake snake;
 
-    // Use this for initialization
     void Start () {
         snake = GetComponent<Snake>();
     }
 
-    // Update is called once per frame
     void Update () {
         if (Input.GetKey(KeyCode.RightArrow))
             snake.ChangeDirection(Vector2.right);
