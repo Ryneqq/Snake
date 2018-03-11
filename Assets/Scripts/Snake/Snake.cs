@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Snake : MonoBehaviour {
@@ -15,34 +16,33 @@ public class Snake : MonoBehaviour {
     void Start(){
         tail = new List<Field>();
         tailTransforms = new List<Transform>();
-        dir = Vector2.right;
+
+        ChangeDirection(Map.Side.right);
         Create(Map.map[x,y], length);
-        dir = Vector2.left;
+        ChangeDirection(Map.Side.left);
+
+        InvokeRepeating("Move", 0.3f, 0.3f);
+    }
+
+    private void AddTail(Field tail) { // To map and scene
+        tail.ChangeField(Map.Fields.tail);
+        this.tail.Add(tail);
+        Spawn(tail.pos);
     }
 
     private void Create (Field head, int length) {
-        int x = (int)dir.x, y = (int)dir.y;
-        tail.Add(head);
-        for(int i = 1; i < length; i++){
-            tail.Add(Map.map[tail[i-1].x + x, tail[i-1].y + y]);
-        } 
-        for(int  i = 0 ; i < tail.Count; i++){
-            Map.map[tail[i].x,tail[i].y].ChangeField(Map.Fields.tail);
-            Spawn(tail[i].pos);
-        }
+        AddTail(head);
 
-        InvokeRepeating("Move", 0.3f, 0.3f); 
+        for(int i = 0; i < length - 1; i++)
+            AddTail(Map.Neighbour(tail.Last(), Direction()));
     }
 
-    public void ChangeDirection(Vector2 _dir) {
-        if(dir.x == _dir.x && dir.y == -_dir.y)
-            return;
-        if(dir.x == -_dir.x && dir.y == _dir.y)
-            return;
-        if(_dir.x == 0 && _dir.y == 0)
-            return;
-        if(_dir.x == 0 || _dir.y == 0)
-            dir = _dir;
+    public Map.Side Direction(){
+        return Map.Direction(dir);
+    }
+
+    public void ChangeDirection(Map.Side side) {
+        dir = Map.Direction(side);
     }
 
     public void Turn(string side){
@@ -78,37 +78,34 @@ public class Snake : MonoBehaviour {
         }
     }
 
+    private void Slither(Field next) {
+        for(int i = tail.Count - 1; i > 0; i--)
+            tail[i] = tail[i-1];
+
+        next.ChangeField(Map.Fields.tail);
+        tail[0] = next;
+
+        for(int  i = 0; i < tail.Count; i++)
+            tailTransforms[i].position = tail[i].pos;
+    }
+
     private void Move() {
-        int x = (int)dir.x, y = (int)dir.y;
-        int last = tail.Count-1;
-        Field next = Map.map[tail[0].x + x, tail[0].y + y];
+        var next = Map.Neighbour(Head(), Direction());
+        var last = tail.Last();
+
         if(!next.IsWalkable()){
-            //dead
             // Destroy(this.gameObject);
             Debug.Log("dead");
             return;
         }
 
-        if(next.field != Map.Fields.food) {
-            Map.map[tail[last].x, tail[last].y].ChangeField(Map.Fields.empty);
-        } else {
+        if(next.IsFood()) {
             food.Eat();
-            Spawn(tail[last].pos);
-            x = tail[last].x; y = tail[last].y;
-        }
-
-        for(int i = last; i > 0; i--){
-            tail[i] = tail[i-1];
-        }
-        next.ChangeField(Map.Fields.tail);
-        tail[0] = next;
-
-        if (tailTransforms.Count != tail.Count){
-            tail.Add(Map.map[x,y]);
-        }
-
-        for(int  i = 0 ; i < tail.Count; i++){
-            tailTransforms[i].position = tail[i].pos;
+            AddTail(last);
+            Slither(next);
+        } else {
+            last.ChangeField(Map.Fields.empty);
+            Slither(next);
         }
     }
 

@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-    public class Food : MonoBehaviour {
+public class Food : MonoBehaviour {
     public Transform foodPrefab;
+    public int x = 0, y = 0;
     private Transform food;
 
     void Start(){
@@ -11,10 +12,7 @@ using UnityEngine;
     }
 
     private Vector2 FindEmptyField() {
-        int x = 0, y = 0;
-        while(!Map.map[x,y].IsWalkable()){
-            if(Map.map[x,y].field == Map.Fields.food)
-                continue;
+        while(!Map.map[x,y].IsEmpty()){
             x = Random.Range(1, Map.map.GetLength(0));
             y = Random.Range(1, Map.map.GetLength(1));
         }

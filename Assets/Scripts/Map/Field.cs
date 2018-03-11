@@ -21,10 +21,18 @@ public class Field {
         field = Map.Fields.empty;
         walkable = true;
     }
+
+    public Field(int _x, int _y, Vector2 _pos) {
+        field = Map.Fields.empty;
+        walkable = true;
+        x = _x;
+        y = _y;
+        pos = _pos;
+    }
     public void ChangeField(Map.Fields _field) {
         field = _field;
 
-        if(field == Map.Fields.empty || field == Map.Fields.food)
+        if(IsEmpty() || IsFood())
             walkable = true;
         else
             walkable = false;

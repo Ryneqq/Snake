@@ -47,4 +47,15 @@ public static class Map {
                 return Vector2.zero;
         }
     }
+
+    public static Side Direction(Vector2 dir) {
+        if(dir == Vector2.right)
+            return Side.right;
+        else if(dir == Vector2.left)
+            return Side.left;
+        else if(dir == Vector2.up)
+            return Side.up;
+        else
+            return Side.down;
+    }
 }
