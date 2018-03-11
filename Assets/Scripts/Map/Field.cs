@@ -17,25 +17,33 @@ public class Field {
     public bool walkable;
 
 
-    public Field()
-    {
+    public Field() {
         field = Map.Fields.empty;
         walkable = true;
     }
-    public void ChangeField(Map.Fields _field){
+    public void ChangeField(Map.Fields _field) {
         field = _field;
-        if(field == Map.Fields.empty || field == Map.Fields.food){
+
+        if(field == Map.Fields.empty || field == Map.Fields.food)
             walkable = true;
-        }  else {
+        else
             walkable = false;
-        }
     }
-    public bool IsWalkable()
-    {
-        if (field == Map.Fields.empty || field == Map.Fields.food)
-        {
+    public bool IsWalkable() {
+        if (IsEmpty() || IsFood())
             return true;
-        }
+        return false;
+    }
+
+    public bool IsEmpty() {
+        if (field == Map.Fields.empty)
+            return true;
+        return false;
+    }
+
+    public bool IsFood() {
+        if (field == Map.Fields.food)
+            return true;
         return false;
     }
 }

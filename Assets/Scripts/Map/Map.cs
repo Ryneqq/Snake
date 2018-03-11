@@ -10,6 +10,10 @@ public static class Map {
     /// Type of Fields used to build map.
     /// </summary>
     public enum Fields { empty, wall, tail, food };
+    /// <summary>
+    /// Sides of map.
+    /// </summary>
+    public enum Side { left, right, up, down };
     public static Field[,] map;
 
     public static Field WorldPointToField(Vector3 pos){
@@ -19,6 +23,28 @@ public static class Map {
                     return map[i,j];
             }
         }
-        return new Field();
+        return new Field(); // unsafe
+    }
+
+    public static Field Neighbour(Field field, Side side){
+        var dir = Direction(side);
+        int x = (int)dir.x, y = (int)dir.y;
+
+        return map[field.x + x, field.y + y];
+    }
+
+    public static Vector2 Direction(Side side) {
+        switch (side) {
+            case Side.right: 
+                return Vector2.right;
+            case Side.down: 
+                return Vector2.down;
+            case Side.left:
+                return Vector2.left;
+            case Side.up:
+                return Vector2.up;
+            default:
+                return Vector2.zero;
+        }
     }
 }
