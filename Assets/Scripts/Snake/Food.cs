@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Food : MonoBehaviour {
     public Transform foodPrefab;
-    public int x = 0, y = 0;
+    private int x = 0, y = 0;
     private Transform food;
 
     void Start(){
@@ -12,6 +12,7 @@ public class Food : MonoBehaviour {
     }
 
     private Vector2 FindEmptyField() {
+        x = 0; y = 0;
         while(!Map.map[x,y].IsEmpty()){
             x = Random.Range(1, Map.map.GetLength(0));
             y = Random.Range(1, Map.map.GetLength(1));
@@ -33,6 +34,6 @@ public class Food : MonoBehaviour {
     }
 
     public Vector2 Position(){
-        return food.position;
+        return new Vector2(x,y);
     }
 }

@@ -74,7 +74,7 @@ public class NeuralNetwork {
     }
 
     /// <summary>
-    /// Teach your neural network by example.
+    /// Let your neural network learn by example.
     /// </summary>
     // IN: P - example input, T - example output, n - how many times repeat learning
     public void Learn(Matrix P, Matrix T, int n) {
@@ -142,7 +142,7 @@ public class NeuralNetwork {
         var nnet = new NeuralNetwork(); 
         if(!Load.CheckForFile("nn"))
             throw new AccessViolationException("File not found");
-        string loaded = Load.FromFile("nn");
+        string loaded = Load.FromFile("nn.txt");
         string[] network = loaded.Split(';');
 
         nnet.nn = new Matrix[network.Length];

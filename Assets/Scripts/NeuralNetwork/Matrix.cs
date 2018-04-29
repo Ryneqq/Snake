@@ -55,6 +55,17 @@ public class Matrix
         mat = new double[rows, cols];
     }
 
+    public Matrix(int iRows, int iCols, double fill)         // Matrix Class constructor with fill
+    {
+        rows = iRows;
+        cols = iCols;
+        mat = new double[rows, cols];
+
+        for (int i = 0; i < rows; i++) 
+            for (int j = 0; j < cols; j++) 
+                mat[i,j] = fill;
+    }
+
     public Boolean IsSquare()
     {
         return (rows == cols);
@@ -91,6 +102,16 @@ public class Matrix
         for(int i = 0; i < m.cols; i++) {
             m[k,i] = v[l,i];
             m[l,i] = v[k,i];
+        }
+        return m;
+    }
+
+    public static Matrix SwitchCols(Matrix v, int k, int l)
+    {
+        Matrix m = v.Duplicate();
+        for(int i = 0; i < m.rows; i++) {
+            m[i,k] = v[i,l];
+            m[i,l] = v[i,k];
         }
         return m;
     }

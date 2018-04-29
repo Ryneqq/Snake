@@ -1,4 +1,5 @@
 using System.Text;
+using System.IO;
 
 
 /// <summary>
@@ -7,9 +8,22 @@ using System.Text;
 public static class Load {
     private static string path = "./"; 
 
+    public static string FromDirectory(string name) {
+        string _path = path + name;
+        string read = string.Empty;
+        string newLine = "\r\n";
+        var files = Directory.GetFiles(_path);
+
+        foreach (var file in files) {
+            read += FromFile(file) + newLine;
+        }
+
+        return read;
+    }
+
     public static string FromFile(string name) {
-        string _path = path + name + ".txt";
-        string read = System.IO.File.ReadAllText(_path, Encoding.Default);
+        string _path = path + name;
+        string read = File.ReadAllText(_path, Encoding.Default);
 
         if (read != null)
             return read;
@@ -18,13 +32,13 @@ public static class Load {
 
     public static void Delete(string name) {
         string _path = path + name + ".txt";
-        if(System.IO.File.Exists(_path))
-            System.IO.File.Delete(_path);
+        if(File.Exists(_path))
+            File.Delete(_path);
     }
 
     public static bool CheckForFile(string name) {
         string _path = path + name + ".txt";
-        if(System.IO.File.Exists(_path))
+        if(File.Exists(_path))
             return true;
         return false;
     }

@@ -13,7 +13,7 @@ public static class Map {
     /// <summary>
     /// Sides of map.
     /// </summary>
-    public enum Side { left, right, up, down };
+    public enum Side {up, right, down, left};
     public static Field[,] map;
 
     public static Field WorldPointToField(Vector3 pos){
@@ -57,5 +57,23 @@ public static class Map {
             return Side.up;
         else
             return Side.down;
+    }
+
+    public static Side Right(Side side) {
+        int x = (int)side;
+
+        if(++x > 3)
+            x = 0;
+
+        return (Side)x;
+    }
+
+    public static Side Left(Side side) {
+        int x = (int)side;
+
+        if(--x < 0)
+            x = 3;
+
+        return (Side)x;
     }
 }

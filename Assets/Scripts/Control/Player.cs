@@ -37,9 +37,7 @@ public class Player : MonoBehaviour {
                 snake.ChangeDirection(side);
                 gotInput = true;
             }
-        } else
-
-        if(snake.Direction() == Map.Side.up || snake.Direction() == Map.Side.down) {
+        } else if(snake.Direction() == Map.Side.up || snake.Direction() == Map.Side.down) {
             if (side == Map.Side.right || side == Map.Side.left) {
                 snake.ChangeDirection(side);
                 gotInput = true;

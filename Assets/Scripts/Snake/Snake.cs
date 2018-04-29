@@ -11,15 +11,15 @@ public class Snake : MonoBehaviour {
     public Color color;
     List<Field> tail;
     List<Transform> tailTransforms;
-    Vector2 dir;
+    Map.Side dir;
 
-    void Start(){
+    void Start() {
         tail = new List<Field>();
         tailTransforms = new List<Transform>();
 
         ChangeDirection(Map.Side.right);
         Create(Map.map[x,y], length);
-        ChangeDirection(Map.Side.left);
+        ChangeDirection(Map.Side.down);
 
         InvokeRepeating("Move", 0.3f, 0.3f);
     }
@@ -38,43 +38,23 @@ public class Snake : MonoBehaviour {
     }
 
     public Map.Side Direction(){
-        return Map.Direction(dir);
+        return dir;
     }
 
     public void ChangeDirection(Map.Side side) {
-        dir = Map.Direction(side);
+        dir = side;
     }
 
-    public void Turn(string side){
-
-        if(side == "right"){
-            if(dir.x == 1){
-                dir.x = 0;
-                dir.y = -1;
-            } else if (dir.x == -1) {
-                dir.x = 0;
-                dir.y = 1;
-            } else if (dir.y == 1){
-                dir.x = 1;
-                dir.y = 0;
-            } else {
-                dir.x = -1;
-                dir.y = 0;
-            }
-        } else {
-            if(dir.x == 1){
-                dir.x = 0;
-                dir.y = 1;
-            } else if (dir.x == -1) {
-                dir.x = 0;
-                dir.y = -1;
-            } else if (dir.y == 1){
-                dir.x = -1;
-                dir.y = 0;
-            } else {
-                dir.x = 1;
-                dir.y = 0;
-            }
+    public void Turn(Map.Side side) {
+        switch(side) {
+            case Map.Side.right:
+                dir = Map.Right(side);
+                break;
+            case Map.Side.left:
+                dir = Map.Right(side);
+                break;
+            default:
+                break;
         }
     }
 
@@ -121,9 +101,6 @@ public class Snake : MonoBehaviour {
         tailTransforms.Add(temp);
     }
 
-    public Vector2 Dir(){
-        return dir;
-    }
     public Field Head(){
         return tail[0];
     }
