@@ -9,7 +9,7 @@ public class NN : MonoBehaviour {
     NeuralNetwork nn;
     Matrix P; // examples
     Matrix T; // correct resposes
-    bool create = true; // shall we create new nn
+    bool create = false; // shall we create new nn
     bool examples = false; // examples were loaded from file
 
     void Start() {
@@ -25,8 +25,8 @@ public class NN : MonoBehaviour {
 
     private void CreateNeuralNetwork() {
         int[] layers = new int[3];
-        layers[0] = 8;
-        layers[1] = 4;
+        layers[0] = 10;
+        layers[1] = 5;
         layers[2] = 2;
         nn = new NeuralNetwork(10, layers);
         Learn();
@@ -47,28 +47,25 @@ public class NN : MonoBehaviour {
     private void LoadExamples(){
         string p = string.Empty, t = string.Empty;
         string[] question = new string[10], anwser = new string[2];
-        string newLine = "\n\r";
+        string newLine = "\r\n";
 
         string loaded = Load.FromFile("examples/examples.txt");
-
         string[] examples = loaded.Split(';');
-        
 
-        foreach (var example in examples) {
-            var arr = example.Split(',');
+        for (int i = 0; i < examples.GetLength(0); i++){
+            var arr = examples[i].Split(',');
+
+            if(i >= examples.GetLength(0) - 1)
+                newLine = String.Empty;
 
             Array.Copy(arr, 0, question, 0, 10);
-            p += String.Join("", question) + newLine;
+            p += String.Join(" ", question) + newLine;
             Array.Copy(arr, 10, anwser, 0, 2);
-            t += String.Join("", anwser) + newLine;
+            t += String.Join(" ", anwser) + newLine;
         }
 
-        Debug.Log("t: " + t );
         P = Matrix.Transpose(Matrix.Parse(p));
-        T = Matrix.Parse(t);
-
-        Debug.Log("P: " + P.cols + " T: " + T.cols);
-        Debug.Log(T);
+        T = Matrix.Transpose(Matrix.Parse(t));
 
         this.examples = true;
     }

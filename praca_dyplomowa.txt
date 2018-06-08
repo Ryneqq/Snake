@@ -1,0 +1,15 @@
+
+Używane narzędzia: 
+Unity z C# i .net 3.5
+    biblioteka Matrix na licencji MIT
+
+Rust nightly
+    rulinalg /rust linear algebra/
+
+Do pracy napisałem 2 biblioteki, ponieważ nie byłem zadowolony z pisania testów w Unity i wyszło, że
+bibliotek 
+
+
+konkluzja z pracy:
+
+nie warto używać sieci neuronowych jeżeli są dostępne algorytmy dokładne.
