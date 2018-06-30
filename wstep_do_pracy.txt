@@ -1,0 +1,9 @@
+
+Zazwyczaj wielkie nauki sa zgromadzone wokol wielkich pytan. Czlowiek zawsze zastanawia sie skad sie wzial. Przy tym zaczyna sobie zadawac pytania 
+'Dlaczego moze sobie zadac to pytanie?' patrzy na zwierzeta dookola,i zastanawia sie czy one tez nie zadaja sobie tego pytania. To samoswiadomosc, fascynujaca cecha ludzka, 
+a byc moze dostatecznie skomplikowanego organizmu. Fascynacja tym zjawiskiem
+zachecila ludzi do proby stworzenia na swoje podobienstwo maszyny ktora bylaby rownie inteligentna jak on sam, w tej walce sromotnie sromotnie przegrali. 
+Nie ma tego zlego otrzymalismy wiele narzedzi jak sieci neuronowe, ktore sa fenomentalne w rozwiazywaniu problemow w nie do konca zdefiniowanych systemach.
+
+Obiecujący początek, niestety rzeczywistość jest inna, blokuje nas dostepna szybkosc obliczeniowa. 
+czesc teoretyczna..

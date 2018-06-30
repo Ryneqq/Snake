@@ -24,11 +24,9 @@ public class NN : MonoBehaviour {
     }
 
     private void CreateNeuralNetwork() {
-        int[] layers = new int[3];
-        layers[0] = 10;
-        layers[1] = 5;
-        layers[2] = 2;
+        int[] layers = {10, 8, 4, 2};
         nn = new NeuralNetwork(10, layers);
+
         Learn();
     }
 
