@@ -38,3 +38,5 @@ sysinfo.txt
 .vscode/
 ProjectSettings/
 UnityPackageManager/
+NeuralNetwork/bin
+NeuralNetwork/obj
