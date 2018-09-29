@@ -20,21 +20,6 @@ public class Snake : MonoBehaviour {
         ChangeDirection(Map.Side.right);
         Create(Map.map[x,y], length);
         ChangeDirection(Map.Side.down);
-
-        InvokeRepeating("Move", 0.3f, 0.3f);
-    }
-
-    private void AddTail(Field tail) { // To map and scene
-        tail.ChangeField(Map.Fields.tail);
-        this.tail.Add(tail);
-        Spawn(tail.pos);
-    }
-
-    private void Create (Field head, int length) {
-        AddTail(head);
-
-        for(int i = 0; i < length - 1; i++)
-            AddTail(Map.Neighbour(tail.Last(), Direction()));
     }
 
     public Map.Side Direction(){
@@ -48,28 +33,17 @@ public class Snake : MonoBehaviour {
     public void Turn(Map.Side side) {
         switch(side) {
             case Map.Side.right:
-                dir = Map.Right(side);
+                dir = Map.Right(dir);
                 break;
             case Map.Side.left:
-                dir = Map.Right(side);
+                dir = Map.Left(dir);
                 break;
             default:
                 break;
         }
     }
 
-    private void Slither(Field next) {
-        for(int i = tail.Count - 1; i > 0; i--)
-            tail[i] = tail[i-1];
-
-        next.ChangeField(Map.Fields.tail);
-        tail[0] = next;
-
-        for(int  i = 0; i < tail.Count; i++)
-            tailTransforms[i].position = tail[i].pos;
-    }
-
-    private void Move() {
+    public void Move() {
         var next = Map.Neighbour(Head(), Direction());
         var last = tail.Last();
 
@@ -89,6 +63,34 @@ public class Snake : MonoBehaviour {
         }
     }
 
+    public Field Head(){
+        return tail[0];
+    }
+
+    private void AddTail(Field tail) { // To map and scene
+        tail.ChangeField(Map.Fields.tail);
+        this.tail.Add(tail);
+        Spawn(tail.pos);
+    }
+
+    private void Create (Field head, int length) {
+        AddTail(head);
+
+        for(int i = 0; i < length - 1; i++)
+            AddTail(Map.Neighbour(tail.Last(), Direction()));
+    }
+
+    private void Slither(Field next) {
+        for(int i = tail.Count - 1; i > 0; i--)
+            tail[i] = tail[i-1];
+
+        next.ChangeField(Map.Fields.tail);
+        tail[0] = next;
+
+        for(int  i = 0; i < tail.Count; i++)
+            tailTransforms[i].position = tail[i].pos;
+    }
+
     private void ChangeColor(Transform t) {
         t.GetComponent<SpriteRenderer>().color = color;
         color = Color.Lerp(color, Color.white, .15f);
@@ -99,9 +101,5 @@ public class Snake : MonoBehaviour {
         temp.transform.SetParent(GetComponent<Transform>(), false);
         ChangeColor(temp);
         tailTransforms.Add(temp);
-    }
-
-    public Field Head(){
-        return tail[0];
     }
 }

@@ -5,11 +5,12 @@ using System.Linq;
 using UnityEngine;
 
 public class NN : MonoBehaviour {
+    public bool create = false; // shall we create new nn
+
     Snake snake;
     NeuralNetwork nn;
     Matrix P; // examples
     Matrix T; // correct resposes
-    bool create = false; // shall we create new nn
     bool examples = false; // examples were loaded from file
 
     void Start() {
@@ -20,12 +21,12 @@ public class NN : MonoBehaviour {
         else
             LoadNeuralNetwork();
 
-        InvokeRepeating("Steer", .3f, .3f);
+        InvokeRepeating("Steer", 0.5f, 0.5f);
     }
 
     private void CreateNeuralNetwork() {
-        int[] layers = {10, 8, 4, 2};
-        nn = new NeuralNetwork(10, layers);
+        int[] layers = {10, 16, 8, 4, 2};
+        nn = new NeuralNetwork(layers);
 
         Learn();
     }
@@ -70,7 +71,7 @@ public class NN : MonoBehaviour {
 
     private Vector2 DistanceToFood() {
         var food = snake.food.Position();
-        return new Vector2(snake.Head().x - food.x, snake.Head().y - food.y);
+        return new Vector2(food.x - snake.Head().x, food.y - snake.Head().y);
     }
 
     private Matrix GetView() { // fixed but still no idea how it works
@@ -151,5 +152,7 @@ public class NN : MonoBehaviour {
         var perception = CreatePerception();
         ChangePerceptionOfTheFood(perception);
         ChangeDirection(perception);
+        Debug.Log(perception.ToString());
+        this.snake.Move();
     }
 }

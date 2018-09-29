@@ -10,11 +10,8 @@ public class XOR : MonoBehaviour {
     NeuralNetwork nn;
 
     void Start () {
-        int[] layers = new int[3];
-        layers[0] = 4;
-        layers[1] = 2;
-        layers[2] = 1;
-        nn = new NeuralNetwork(2, layers);
+        int[] layers = new int[] { 2, 4, 2, 1 };
+        nn = new NeuralNetwork(layers);
 
         Debug.Log("Before learning");
         Debug.Log("Correct: 0, Network response: " + nn.Run(Matrix.Parse("0\r\n0")).ToString());

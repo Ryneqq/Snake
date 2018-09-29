@@ -9,17 +9,15 @@ public class NeuralNetwork {
     private int beta = 5;
 
     NeuralNetwork() {}
+    public NeuralNetwork(int[] layers)
+    {
+        var lsl = layers.Length - 1;
+        this.nn = new Matrix[lsl];
 
-    /// <summary>
-    /// Constructor takes number of inputs and an array of numbers of neurons in each layer.
-    /// Initialize neural network with random wages.
-    /// </summary>
-    public NeuralNetwork(int inputs, int[] layers) {
-        nn = new Matrix[layers.Length];
-        nn[0] = Matrix.RandomMatrix(inputs + 1, layers[0], 0.1f);
-        for(int i = 1; i < layers.Length; i++){
-            nn[i] = Matrix.RandomMatrix(layers[i-1] + 1, layers[i], 0.1f);
-        } 
+        for(int i = 0, n = 0; n < lsl; i++, n++)
+        {
+            this.nn[n] = Matrix.RandomMatrix(layers[i] + 1, layers[i + 1], 100);
+        }
     }
 
     public void Display() {
