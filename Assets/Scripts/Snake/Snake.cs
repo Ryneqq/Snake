@@ -19,7 +19,7 @@ public class Snake : MonoBehaviour {
 
         ChangeDirection(Map.Side.right);
         Create(Map.map[x,y], length);
-        ChangeDirection(Map.Side.down);
+        ChangeDirection(Map.Side.left);
     }
 
     public Map.Side Direction(){
@@ -44,7 +44,11 @@ public class Snake : MonoBehaviour {
     }
 
     public void Move() {
-        var next = Map.Neighbour(Head(), Direction());
+        Move(Map.Neighbour(Head(), Direction()));
+    }
+
+    public void Move(Field next)
+    {
         var last = tail.Last();
 
         if(!next.IsWalkable()){
@@ -64,7 +68,13 @@ public class Snake : MonoBehaviour {
     }
 
     public Field Head(){
-        return tail[0];
+        return this.tail[0];
+    }
+
+    public Field Food(){
+        var position = this.food.Position();
+
+        return Map.map[(int)position.x, (int)position.y];
     }
 
     private void AddTail(Field tail) { // To map and scene

@@ -16,21 +16,28 @@ public static class Map {
     public enum Side {up, right, down, left};
     public static Field[,] map;
 
-    public static Field WorldPointToField(Vector3 pos){
-        for(int i = 0 ; i < map.GetLength(0); i++){
-            for(int j = 0; j < map.GetLength(1); j++){
-                if(Vector3.Distance(pos, map[i,j].pos) < 0.05f)
-                    return map[i,j];
-            }
-        }
-        return new Field(); // unsafe
-    }
-
     public static Field Neighbour(Field field, Side side){
         var dir = Direction(side);
         int x = (int)dir.x, y = (int)dir.y;
 
         return map[field.x + x, field.y + y];
+    }
+
+    public static List<Field> GetNeighbours(Field field)
+    {
+        var fields = new List<Field>();
+        var side = Side.up;
+        // Debug.Log(string.Concat("Field x:", field.x, "y:", field.y));
+
+        for(int i = 0; i < 4; i++)
+        {
+            var neighbour = Neighbour(field, side);
+            fields.Add(neighbour);
+            side = Right(side);
+            // Debug.Log(string.Concat("Neighbour x:", neighbour.x, "y:", neighbour.y));
+        }
+
+        return fields;
     }
 
     public static Vector2 Direction(Side side) {
@@ -49,6 +56,16 @@ public static class Map {
     }
 
     public static Side Direction(Vector2 dir) {
+        // var threshold = 0.05f;
+        // if(Vector2.Distance(Vector2.right, dir) < threshold)
+        //     return Side.right;
+        // else if(Vector2.Distance(Vector2.left, dir) < threshold)
+        //     return Side.left;
+        // else if(Vector2.Distance(Vector2.up, dir) < threshold)
+        //     return Side.up;
+        // else
+        //     return Side.down;
+
         if(dir == Vector2.right)
             return Side.right;
         else if(dir == Vector2.left)
@@ -57,6 +74,13 @@ public static class Map {
             return Side.up;
         else
             return Side.down;
+    }
+
+    public static Side Direction(Field from, Field to)
+    {
+        var dir = new Vector2(to.x - from.x, to.y - from.y);
+
+        return Direction(dir);
     }
 
     public static Side Right(Side side) {
