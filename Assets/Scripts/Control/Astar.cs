@@ -5,10 +5,12 @@ using UnityEngine;
 
 public class Astar : MonoBehaviour {
     Snake snake;
+    CustomPathfinder pathfinder;
 
     void Start ()
     {
         this.snake = GetComponent<Snake>();
+        this.pathfinder = new CustomPathfinder();
         InvokeRepeating("MoveSnake", 0.1f, 0.1f);
     }
 
@@ -26,7 +28,9 @@ public class Astar : MonoBehaviour {
     {
         // var start = Map.Neighbour(this.snake.Head(), this.snake.Direction());
         var start = this.snake.Head();
-        var nextStep = new CustomPathfinder(start, this.snake.Food()).FindPath();
+        // var nextStep = new CustomPathfinder(start, this.snake.Food()).FindPath();
+        var nextStep = this.pathfinder.FindPath(this.snake.Head(), this.snake.Food());
+
 
         if (nextStep != start)
         {

@@ -1,15 +1,41 @@
 using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class CustomPathfinder {
     Field start, target;
+    List<Field> path;
+
+    public CustomPathfinder()
+    {
+        this.path = new List<Field>();
+    }
 
     public CustomPathfinder(Field start, Field target)
     {
         this.start  = start;
         this.target = target;
+        this.path   = new List<Field>();
+    }
+
+    public Field FindPath(Field start, Field target)
+    {
+        this.start  = start;
+        this.target = target;
+
+        if(!this.IsEmpty())
+        {
+            this.path.Remove(this.path.Last());
+
+            if(this.IsActual())
+            {
+                return this.path.Last();
+            }
+        }
+
+        return FindPath();
     }
 
     public Field FindPath()
@@ -115,10 +141,13 @@ public class CustomPathfinder {
     private Field RetracePath()
     {
         Field current = this.target;
+        this.path.Clear();
+        this.path.Add(current);
 
         while(current.parent != this.start)
         {
             current = current.parent;
+            this.path.Add(current);
         }
 
         return current;
@@ -130,5 +159,23 @@ public class CustomPathfinder {
         int distanceY = Math.Abs(from.y - to.y);
 
         return (distanceX + distanceY) * 10;
+    }
+
+    private bool IsEmpty()
+    {
+        return this.path.Count == 0;
+    }
+
+    private bool IsActual()
+    {
+        foreach (var step in this.path)
+        {
+            if(!step.IsWalkable())
+            {
+                return false;
+            }
+        }
+
+        return true && this.path.Count > 0;
     }
 }
