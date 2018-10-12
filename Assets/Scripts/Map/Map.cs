@@ -27,14 +27,12 @@ public static class Map {
     {
         var fields = new List<Field>();
         var side = Side.up;
-        // Debug.Log(string.Concat("Field x:", field.x, "y:", field.y));
 
         for(int i = 0; i < 4; i++)
         {
             var neighbour = Neighbour(field, side);
             fields.Add(neighbour);
             side = Right(side);
-            // Debug.Log(string.Concat("Neighbour x:", neighbour.x, "y:", neighbour.y));
         }
 
         return fields;
@@ -56,16 +54,6 @@ public static class Map {
     }
 
     public static Side Direction(Vector2 dir) {
-        // var threshold = 0.05f;
-        // if(Vector2.Distance(Vector2.right, dir) < threshold)
-        //     return Side.right;
-        // else if(Vector2.Distance(Vector2.left, dir) < threshold)
-        //     return Side.left;
-        // else if(Vector2.Distance(Vector2.up, dir) < threshold)
-        //     return Side.up;
-        // else
-        //     return Side.down;
-
         if(dir == Vector2.right)
             return Side.right;
         else if(dir == Vector2.left)
