@@ -88,18 +88,33 @@ public class NeuralNetwork {
         }
     }
 
-    public void Learn2(Matrix P, Matrix T, int n) {
-        int example = 0;
-        int layers = nn.Length; // number of layers
+    public bool Learn(Matrix signal, Matrix anwser) {
+        int layers = nn.Length;
 
-        for(int i = 0; i < n; i++) {
-            example = UnityEngine.Random.Range(0, P.cols);
-            Matrix signal = ChooseExample(P, example);
-            Matrix[] signals = RunAndReturnSignals(signal, layers);
-            Matrix delta = GetAnwser(T, example) - signals[layers];
-            BackPropagation(signals, delta, layers);
-        }
+        Matrix[] signals = RunAndReturnSignals(signal, layers);
+        Matrix delta = anwser - signals[layers];
+        BackPropagation(signals, delta, layers);
+
+        return Test(signal, anwser);
     }
+
+        bool Test(Matrix question, Matrix anwser)
+        {
+            var margin = 0.25;
+            var errors = 0;
+            var result = this.Run(question);
+            var actual = result - anwser;
+
+            foreach(var a in actual.mat)
+            {
+                if(Math.Abs(a) > margin)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
 
     Matrix Run(Matrix signal, int index) {
         Matrix X = AddBias(signal);
