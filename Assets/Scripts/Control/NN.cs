@@ -21,7 +21,7 @@ public class NN : MonoBehaviour {
         else
             LoadNeuralNetwork();
 
-        InvokeRepeating("Steer", 0.5f, 0.5f);
+        // InvokeRepeating("Steer", 0.5f, 0.5f);
     }
 
     private void CreateNeuralNetwork() {
@@ -71,17 +71,31 @@ public class NN : MonoBehaviour {
 
     private Vector2 DistanceToFood() {
         var food = snake.food.Position();
-        return new Vector2(food.x - snake.Head().x, food.y - snake.Head().y);
+        return new Vector2(snake.Head().x - food.x, snake.Head().y - food.y);
     }
 
-    private Matrix GetView() { // fixed but still no idea how it works
-        var pos = snake.Head();
-        var view = new Matrix(3,3);
+    private double[] GetView() { // fixed but still no idea how it works
+        // var pos = snake.Head();
+        // var view = new Matrix(3,3);
 
-        for(int i = -1; i <= 1; i++)
-            for(int j = -1; j <= 1; j++)
-                view[i+1, j+1] = (int)Map.map[pos.x + j, pos.y + i].field;
-        view = Matrix.SwitchRows(view,0,2);
+        // for(int i = -1; i <= 1; i++)
+        //     for(int j = -1; j <= 1; j++)
+        //         view[i+1, j+1] = (int)Map.map[pos.x + j, pos.y + i].field;
+        // view = Matrix.SwitchRows(view,0,2);
+
+        // return view;
+
+        var view = new double[6];
+        var pos  = this.snake.Head();
+        var dir  = this.snake.Direction();
+        var next  = Map.Neighbour(pos, dir);
+
+        view[0] = (double)  Map.Neighbour(next, Map.Left(dir)).field;
+        view[1] = (double)  next.field;
+        view[2] = (double)  Map.Neighbour(next, Map.Right(dir)).field;
+        view[3] = (double)  Map.Neighbour(pos, Map.Left(dir)).field;
+        view[4] = (double)  pos.field;
+        view[5] = (double)  Map.Neighbour(pos, Map.Right(dir)).field;
 
         return view;
     }
@@ -125,17 +139,20 @@ public class NN : MonoBehaviour {
             snake.Turn(Map.Side.left);
         }
 
-        Debug.Log(dir.ToString());
+        // Debug.Log(dir.ToString());
     }
 
     private Matrix CreatePerception() {
-        var view = TurnView(GetView());
+        // var view = TurnView(GetView());
+        var view = GetView();
         var perception = new Matrix(10, 1);
         var k = 0;
 
-        for (int i = 0; i < 2; i++)
-            for (int j = 0; j <= 2; j++)
-                perception[k++, 0] = view[i,j];
+        // for (int i = 0; i < 2; i++)
+        //     for (int j = 0; j <= 2; j++)
+        //         perception[k++, 0] = view[i,j];
+        for (int i = 0; i < 6; i++)
+            perception[i,0] = view[i];
 
         var dir = Map.Direction(snake.Direction());
         perception[6, 0] = dir.x;
@@ -148,7 +165,7 @@ public class NN : MonoBehaviour {
         return perception;
     }
 
-    private void Steer(){
+    public void MoveSnake(){
         var perception = CreatePerception();
         ChangePerceptionOfTheFood(perception);
         ChangeDirection(perception);

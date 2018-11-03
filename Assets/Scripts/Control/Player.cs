@@ -2,14 +2,14 @@
 
 public class Player : MonoBehaviour {
     Snake snake;
-    bool gotInput             = false;
-    AvaibleSides upAndDown    = new AvaibleSides(Map.Side.up,    Map.Side.down);
+    bool gotInput = false;
+    AvaibleSides upAndDown = new AvaibleSides(Map.Side.up,    Map.Side.down);
     AvaibleSides rightAndLeft = new AvaibleSides(Map.Side.right, Map.Side.left);
 
     void Start ()
     {
         this.snake = GetComponent<Snake>();
-        InvokeRepeating("MoveSnake", 0.3f, 0.3f);
+        // InvokeRepeating("MoveSnake", 0.3f, 0.3f);
     }
 
     void Update ()
@@ -17,9 +17,9 @@ public class Player : MonoBehaviour {
         this.GetInput();
     }
 
-    private void MoveSnake()
+    public void MoveSnake()
     {
-        // this.snake.Move(); // Uncomment when script moved to its own snake (now it is on NN snake)
+        this.snake.Move();
         this.ResetInput();
     }
 

@@ -7,9 +7,12 @@ namespace NeuralNetwork {
         private const int BETA = 5;
         private readonly Matrix[] nn;
         private float step, momentum = 1.0f, learningRate = 0.05f;
+        public int fitness = 0;
 
         public NeuralNetwork(Matrix[] nn)
         {
+            // var afn = new Sigmoid();
+            // var lsl = nn.Length;
             this.nn = nn;
         }
 
@@ -17,11 +20,15 @@ namespace NeuralNetwork {
         {
             var lsl = layers.Length - 1;
             this.nn = new Matrix[lsl];
+            var afn = new Sigmoid(); 
 
-            for(int i = 0, n = 0; n < lsl; i++, n++)
+            for(int i = 0; i < lsl; i++)
             {
-                this.nn[n] = Matrix.RandomMatrix(layers[i] + 1, layers[i + 1], 100);
+                this.nn[i] = Matrix.RandomMatrix(layers[i] + 1, layers[i + 1], 1000);
+                // this.nn[i] = new Matrix(layers[i] + 1, layers[i + 1], 100);
             }
+
+            // nn[lsl-1].afn = new ReLU();
         }
 
         public void Display()
@@ -31,6 +38,11 @@ namespace NeuralNetwork {
                 Console.WriteLine("layer " + i + " rows: " + this.nn[i].rows + " cols: " + this.nn[i].cols);
                 Console.WriteLine(this.nn[i].ToString());
             }
+        }
+
+        public Matrix[] GetNetwork()
+        {
+            return this.nn;
         }
 
         Matrix AddBias(Matrix signal)
@@ -85,8 +97,8 @@ namespace NeuralNetwork {
         {
             var example = 0;
             var rnd = new Random();
-            this.step = 1.0f - 1.0f / (float)repeat;
-            // this.step = 1.0f - 1.0f / (float)(repeat*repeat);
+            this.step = 1.0f - 1.0f / (float)repeat;                // static step
+            // this.step = 1.0f - 1.0f / (float)(repeat*repeat);    // dynamic step
 
             for(var i = 0; i < repeat; i++)
             {
@@ -96,7 +108,6 @@ namespace NeuralNetwork {
                 var delta   = GetExample(anwsers, example) - signals[this.nn.Length];
 
                 this.momentum *= this.step;
-                // Console.WriteLine("momentum: " + this.momentum);
 
                 BackPropagation(signals, delta);
             }
@@ -114,7 +125,6 @@ namespace NeuralNetwork {
 
             //     // this.momentum = 1;
             //     this.momentum = 1.0f - 1.0f / (float)(tests - counter + 1);
-            //     Console.WriteLine("momentum: " + this.momentum);
             //     this.Learn(learningQuestions, learningAnwsers, 10000);
             //     counter++;
             // }
@@ -122,15 +132,14 @@ namespace NeuralNetwork {
             // return true;
 
             this.momentum = 1.0f;
-            this.Learn(learningQuestions, learningAnwsers, 10000);
+            this.Learn(learningQuestions, learningAnwsers, 100 * 100);
             return this.Test(testQuestions, testAnwsers);
-
         }
 
         bool Test(Matrix questions, Matrix anwsers)
         {
             var errors   = 0;
-            var margin   = 0.4;
+            var margin   = 0.25;
             var examples = questions.cols;
 
             for(var i = 0; i < examples; i++)
@@ -140,7 +149,8 @@ namespace NeuralNetwork {
 
                 foreach(var a in actual.mat)
                 {
-                    if(a > margin || a < -margin)
+                    // if(a > margin || a < -margin)
+                    if(Math.Abs(a) > margin)
                     {
                         ++errors;
                         break;
@@ -149,7 +159,7 @@ namespace NeuralNetwork {
             }
 
             Console.WriteLine(string.Concat("Errors: ", errors, "/", examples));
-            margin = 0.25;
+            this.fitness = 100 - errors * 100 / examples;
 
             if (errors > examples * margin)
                 return false;
@@ -161,6 +171,7 @@ namespace NeuralNetwork {
         {
             var signal = AddBias(input);
             var output = Matrix.Transpose(this.nn[layer]) * signal;
+            output.afn = nn[layer].afn;
 
             return ActivationFunction(output);
         }
@@ -198,14 +209,13 @@ namespace NeuralNetwork {
 
         Matrix ActivationFunction(Matrix signal)
         {
-            // sigmoid: 1/(1+exp(-BETA*U))
             var activation = signal.Duplicate();
 
             for(var i = 0; i < activation.rows; i++)
             {
                 for(var j = 0; j < activation.cols; j++)
                 {
-                    activation[i,j] = 1/(1+ System.Math.Exp(-BETA * signal[i,j]));
+                    activation[i,j] = activation.afn.Activate(activation[i,j]);
                 }
             }
 

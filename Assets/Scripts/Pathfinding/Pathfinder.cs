@@ -4,16 +4,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CustomPathfinder {
+public class Pathfinder {
     Field start, target;
     List<Field> path;
 
-    public CustomPathfinder()
+    public Pathfinder()
     {
         this.path = new List<Field>();
     }
 
-    public CustomPathfinder(Field start, Field target)
+    public Pathfinder(Field start, Field target)
     {
         this.start  = start;
         this.target = target;

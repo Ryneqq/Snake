@@ -103,7 +103,7 @@ public class Snake : MonoBehaviour {
 
     private void ChangeColor(Transform t) {
         t.GetComponent<SpriteRenderer>().color = color;
-        color = Color.Lerp(color, Color.white, .15f);
+        color = Color.Lerp(color, Color.white, .1f);
     }
 
     private void Spawn(Vector2 pos){

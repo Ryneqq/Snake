@@ -6,18 +6,18 @@ namespace NeuralNetwork
     {
         static void Main(string[] args)
         {
-            var configuration = new int[] {10, 20, 10, 4, 2};
+            var configuration = new int[] {10, 8, 6, 4, 2};
             var nn = new NeuralNetwork(configuration);
             var n = 1;
             var learning = true;
-            var e = 10;
+            var e = 100;
+            var examples = GeneratExamples(e);
 
-            for(var i = 0; i < 10; i++)
-            {
-                Console.WriteLine("Learning examples: " + i);
-                var examples = GeneratExamples(e);
-                nn.Learn(examples[0], examples[1], examples[2], examples[3]);
-            }
+            // for(var i = 0; i < 10; i++)
+            // {
+            //     Console.WriteLine("Learning examples: " + i);
+            //     nn.Learn(examples[0], examples[1], examples[2], examples[3]);
+            // }
 
             // while(learning)
             // {
@@ -29,19 +29,23 @@ namespace NeuralNetwork
             //     }
             // }
 
-            nn.SaveNeuralNetwork("nn");
+            // nn.SaveNeuralNetwork("nn");
 
-            var ex = GeneratExamples(e);
+            // var ex = GeneratExamples(e);
 
-            for(int i = 0; i < e; i++)
-            {
-                var response = nn.Run(ex[0].GetCol(i));
-                Console.WriteLine("Correct: \n" + ex[1].GetCol(i).ToString() + "Network response: \n" + response.ToString());
+            // for(int i = 0; i < e; i++)
+            // {
+            //     var response = nn.Run(ex[0].GetCol(i));
+            //     Console.WriteLine("Correct: \n" + ex[1].GetCol(i).ToString() + "Network response: \n" + response.ToString());
+            // }
 
-            }
+            // XOR();
+            var evo = new Evolution();
+
+            evo.Run();
         }
 
-        static Matrix[] GeneratExamples(int n) {
+        public static Matrix[] GeneratExamples(int n) {
             var _examples = CreateEmptyExamples(n);
             var _tests    = CreateEmptyExamples(n);
             Save.ToFile("examples/examples_generated", _examples);

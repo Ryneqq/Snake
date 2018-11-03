@@ -67,6 +67,7 @@ public static class Map {
     public static Side Direction(Field from, Field to)
     {
         var dir = new Vector2(to.x - from.x, to.y - from.y);
+        dir.Normalize();
 
         return Direction(dir);
     }

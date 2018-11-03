@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 
 namespace NeuralNetwork
 {
-    public class Matrix
+    public class Matrix: Layer
     {
         /*
     Matrix class in C#
@@ -47,6 +47,8 @@ namespace NeuralNetwork
     public Matrix U;
     private int[] pi;
     private double detOfP = 1;
+
+    // protected Matrix() {}
 
     public Matrix(int iRows, int iCols)         // Matrix Class constructor
     {

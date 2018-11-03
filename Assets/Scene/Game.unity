@@ -195,10 +195,9 @@ GameObject:
   - component: {fileID: 236781952}
   - component: {fileID: 236781955}
   - component: {fileID: 236781954}
-  - component: {fileID: 236781953}
   m_Layer: 0
   m_Name: Astar Snake
-  m_TagString: Untagged
+  m_TagString: Snake
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -216,17 +215,6 @@ Transform:
   m_Father: {fileID: 363747360}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &236781953
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 236781951}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a37b9fc1202d5e441a140bf5f0980796, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &236781954
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -251,8 +239,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tailPrefab: {fileID: 4537449436637464, guid: ee30dedd9acb92f40b3e48a98cb96beb, type: 2}
   food: {fileID: 1553467723}
-  x: 20
-  y: 20
+  x: 10
+  y: 10
   length: 4
   color: {r: 0.88235295, g: 0.032439426, b: 0.032439426, a: 1}
 --- !u!1 &363747358
@@ -530,11 +518,11 @@ GameObject:
   - component: {fileID: 631985088}
   m_Layer: 0
   m_Name: NN Snake
-  m_TagString: Untagged
+  m_TagString: Snake
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &631985085
 Transform:
   m_ObjectHideFlags: 0
@@ -561,8 +549,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tailPrefab: {fileID: 4537449436637464, guid: ee30dedd9acb92f40b3e48a98cb96beb, type: 2}
   food: {fileID: 1553467723}
-  x: 20
-  y: 20
+  x: 15
+  y: 15
   length: 4
   color: {r: 0.032439426, g: 0.6713398, b: 0.88235295, a: 1}
 --- !u!114 &631985087
@@ -1114,6 +1102,7 @@ GameObject:
   - component: {fileID: 1887253325}
   - component: {fileID: 1887253319}
   - component: {fileID: 1887253326}
+  - component: {fileID: 1887253327}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1225,6 +1214,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b86783fcb04a6a24e9f20254d04e45fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1887253327
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1887253318}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5ab48b4752784b4aa4de4a298ba0d2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1986016027
 GameObject:
   m_ObjectHideFlags: 0
@@ -1237,11 +1237,11 @@ GameObject:
   - component: {fileID: 1986016029}
   m_Layer: 0
   m_Name: Player Snake
-  m_TagString: Untagged
+  m_TagString: Snake
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1986016028
 Transform:
   m_ObjectHideFlags: 0
