@@ -132,7 +132,7 @@ namespace NeuralNetwork {
             // return true;
 
             this.momentum = 1.0f;
-            this.Learn(learningQuestions, learningAnwsers, 100 * 100);
+            this.Learn(learningQuestions, learningAnwsers, 100 * 100 * 100);
             return this.Test(testQuestions, testAnwsers);
         }
 

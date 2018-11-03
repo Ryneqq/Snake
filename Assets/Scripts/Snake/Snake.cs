@@ -53,7 +53,7 @@ public class Snake : MonoBehaviour {
 
         if(!next.IsWalkable()){
             // Destroy(this.gameObject);
-            Debug.Log("dead");
+            // Debug.Log("dead");
             return;
         }
 

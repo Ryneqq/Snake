@@ -17,7 +17,7 @@ public class Perception {
         for (int i = 0; i < 6; i++)
             perception[i,0] = view[i];
 
-        var dir = Map.Direction(snake.Direction());
+        var dir = Map.Direction(this.snake.Direction());
         perception[6, 0] = dir.x;
         perception[7, 0] = dir.y;
 
@@ -47,9 +47,9 @@ public class Perception {
         return view;
     }
 
-    private Vector2 DistanceToFood() {
-        var head = snake.Head();
-        var food = snake.food.Position();
+    public Vector2 DistanceToFood() {
+        var head = this.snake.Head();
+        var food = this.snake.food.Position();
 
         return new Vector2(head.x - food.x, head.y - food.y);
     }

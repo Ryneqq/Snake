@@ -7,7 +7,7 @@ namespace NeuralNetwork {
     public class Evolution {
         List<NeuralNetwork> population;
         int qunatity = 100;
-        int generations = 1000;
+        int generations = 100;
         int mutationRate = 10;
 
         public Evolution()
