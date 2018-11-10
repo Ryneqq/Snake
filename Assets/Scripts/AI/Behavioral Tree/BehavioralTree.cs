@@ -10,49 +10,34 @@ public class BehavioralTree {
         var left        = Map.Neighbour(snake.Head(), Map.Left(snake.Direction()));
         var neighbours  = new Field[] {forward, right, left};
         var dist        = new Perception(snake).DistanceToFood();
-        var desired     = this.GetPossibleDirection(Map.Direction(snake.Direction()), dist);
-
-        foreach (var neighbour in neighbours)
-        {
-            if(neighbour.IsFood())
-            {
-                Debug.Log("Found food");
-                return Map.Direction(snake.Head(), neighbour);
-            }
-        }
+        var desired     = this.GetPossibleDirection(snake.Direction(), dist);
 
         if(forward.IsWalkable() && right.IsWalkable() && left.IsWalkable())
         {
-            Debug.Log("following desire and i can see everithing");
             return desired;
         }
         else
         {
-            foreach (var neighbour in neighbours)
+            if(IsDirectionFollowable(snake.Head(), neighbours, desired))
             {
-                if(neighbour.IsWalkable() && desired == Map.Direction(snake.Head(), neighbour))
-                {
-                    Debug.Log("follwing desire but i cannot see some of fields");
-                    return desired;
-                }
+                return desired;
             }
 
-            // var alternative = Map.Direction(this.GetAlternativeDirection(Map.Direction(snake.Direction()), this.GetDesiredDirection(dist)));
+            var alternative = Map.Direction(this.GetAlternativeDirection(dist));
 
-            // foreach (var neighbour in neighbours)
-            // {
-            //     if(neighbour.IsWalkable() && alternative == Map.Direction(snake.Head(), neighbour))
-            //     {
-            //         return alternative;
-            //     }
-            // }
-
-            foreach (var neighbour in neighbours)
+            if(alternative != desired && IsDirectionFollowable(snake.Head(), neighbours, alternative))
             {
-                if(neighbour.IsWalkable())
+                return alternative;
+            }
+            else
+            {
+
+                foreach (var neighbour in neighbours)
                 {
-                    Debug.Log("Going blindly");
-                    return Map.Direction(snake.Head(), neighbour);
+                    if(neighbour.IsWalkable())
+                    {
+                        return Map.Direction(snake.Head(), neighbour);
+                    }
                 }
             }
         }
@@ -60,18 +45,31 @@ public class BehavioralTree {
         return snake.Direction();
     }
 
-    private Map.Side GetPossibleDirection(Vector2 dir, Vector2 dist)
-    {
-        var desiredSide = Map.Direction(GetDesiredDirection(dist));
-        var dirSide     = Map.Direction(dir);
+    // private void ShiftNeighbours(Field[] neighbours)
+    // {
 
-        if(Map.Right(dirSide) == desiredSide)
+    // }
+
+    private bool IsDirectionFollowable(Field start, Field[] neighbours, Map.Side dir)
+    {
+        foreach (var neighbour in neighbours)
         {
-            return desiredSide;
+            if(neighbour.IsWalkable() && dir == Map.Direction(start, neighbour))
+            {
+                return true;
+            }
         }
-        else if(Map.Left(dirSide) == desiredSide)
+
+        return false;
+    }
+
+    private Map.Side GetPossibleDirection(Map.Side dir, Vector2 dist)
+    {
+        var desired = Map.Direction(GetDesiredDirection(dist));
+
+        if(dir == desired || Map.Right(dir) == desired || Map.Left(dir) == desired)
         {
-            return desiredSide;
+            return desired;
         }
         else
         {

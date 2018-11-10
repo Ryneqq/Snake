@@ -420,7 +420,7 @@ public class Matrix
 
     private static Matrix StrassenMultiply(Matrix A, Matrix B)                // Smart matrix multiplication
     {
-        if (A.cols != B.rows) throw new MException("Wrong dimension of matrix!");
+        if (A.cols != B.rows) throw new MException("Wrong dimension of matrix! A cols: "+ A.cols + " B rows: " + B.rows);
 
         Matrix R;
 

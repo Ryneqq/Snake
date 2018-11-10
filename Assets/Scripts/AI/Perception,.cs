@@ -11,19 +11,29 @@ public class Perception {
 
     public Matrix CreatePerception() 
     {
-        var perception = new Matrix(10, 1);
-        var view       = GetView();
+        // var perception = new Matrix(10, 1);
+        // var view       = GetView();
 
-        for (int i = 0; i < 6; i++)
-            perception[i,0] = view[i];
+        // for (int i = 0; i < 6; i++)
+        //     perception[i,0] = view[i];
+
+        var perception = new Matrix(7, 1);
+
+        var right       = (double) Map.Neighbour(this.snake.Head(), Map.Right(this.snake.Direction())).field;
+        var forward     = (double) Map.Neighbour(this.snake.Head(), this.snake.Direction()).field;
+        var left        = (double) Map.Neighbour(this.snake.Head(), Map.Left(this.snake.Direction())).field;
+
+        perception[0, 0] = right;
+        perception[1, 0] = forward;
+        perception[2, 0] = left;
 
         var dir = Map.Direction(this.snake.Direction());
-        perception[6, 0] = dir.x;
-        perception[7, 0] = dir.y;
+        perception[3, 0] = dir.x;
+        perception[4, 0] = dir.y;
 
         var dist = DistanceToFood();
-        perception[8, 0] = dist.x;
-        perception[9, 0] = dist.y;
+        perception[5, 0] = dist.x;
+        perception[6, 0] = dist.y;
 
         ChangePerceptionOfTheFood(perception);
 

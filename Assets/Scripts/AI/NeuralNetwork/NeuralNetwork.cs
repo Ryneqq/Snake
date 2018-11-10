@@ -100,16 +100,30 @@ public class NeuralNetwork {
 
         bool Test(Matrix question, Matrix anwser)
         {
-            var margin = 0.25;
-            var errors = 0;
+            var margin = 0.5;
             var result = this.Run(question);
-            var actual = result - anwser;
 
-            foreach(var a in actual.mat)
+            // var actual = result - anwser;
+
+            // foreach(var a in actual.mat)
+            // {
+            //     if(Math.Abs(a) > margin)
+            //     {
+            //         return false;
+            //     }
+            // }
+
+            for (int i = 0; i < result.rows; i++)
             {
-                if(Math.Abs(a) > margin)
+                for (int j = 0; j < result.cols; j++)
                 {
-                    return false;
+                    if(result[i,j] > margin)
+                        result[i,j] = 1;
+                    if(result[i,j] <= margin)
+                        result[i,j] = 0;
+
+                    if(result[i,j] != anwser[i,j])
+                        return false;
                 }
             }
 
