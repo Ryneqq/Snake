@@ -18,9 +18,8 @@ public static class Map {
 
     public static Field Neighbour(Field field, Side side){
         var dir = Direction(side);
-        int x = (int)dir.x, y = (int)dir.y;
 
-        return map[field.x + x, field.y + y];
+        return map[field.x + (int)dir.x, field.y + (int)dir.y];
     }
 
     public static List<Field> GetNeighbours(Field field)

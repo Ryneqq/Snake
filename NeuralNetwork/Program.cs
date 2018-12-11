@@ -6,7 +6,7 @@ namespace NeuralNetwork
     {
         static void Main(string[] args)
         {
-            var configuration = new int[] {10, 8, 6, 4, 2};
+            var configuration = new int[] {7, 7, 2};
             var nn = new NeuralNetwork(configuration);
             var n = 1;
             var learning = true;
@@ -88,7 +88,7 @@ namespace NeuralNetwork
         {
             var questions = string.Empty;
             var anwsers   = string.Empty;
-            var question  = new string[10];
+            var question  = new string[7];
             var anwser    = new string[2];
             var newLine   = "\r\n";
 
@@ -100,8 +100,8 @@ namespace NeuralNetwork
             {
                 var example = examples[i].Split(",");
 
-                Array.Copy(example, 0,  question, 0, 10);
-                Array.Copy(example, 10, anwser,   0, 2);
+                Array.Copy(example, 0,  question, 0, 7);
+                Array.Copy(example, 7,  anwser,   0, 2);
 
                 if(i >= length - 2)
                     newLine = String.Empty;
@@ -126,7 +126,7 @@ namespace NeuralNetwork
 
         static string CreateEmptyExamples(int n) {
             var zeros = ".00,";
-            var view  = "0.00,0.00,0.00,0.00,2.00,0.00,";
+            var view  = "0.00,0.00,0.00,";
             var side  = new string[] {"0.00,1.00,", "0.00,-1.00,", "1.00,0.00,", "-1.00,0.00,"};
             var save  = string.Empty;
 

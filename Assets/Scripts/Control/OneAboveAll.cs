@@ -11,19 +11,19 @@ public class OneAboveAll : MonoBehaviour {
 
     void Start ()
     {
-        // this.astar  = GameObject.Find("Astar Snake").GetComponent<Astar>();
-        // this.player = GameObject.Find("Player Snake").GetComponent<Player>();
+        this.astar  = GameObject.Find("Astar Snake").GetComponent<Astar>();
+        this.player = GameObject.Find("Player Snake").GetComponent<Player>();
         this.nn     = GameObject.Find("NN Snake").GetComponent<NN>();
-        // this.bt     = GameObject.Find("BTree Snake").GetComponent<BTree>();
+        this.bt     = GameObject.Find("BTree Snake").GetComponent<BTree>();
 
         InvokeRepeating("MoveSnake", 0.3f, 0.3f);
     }
 
     private void MoveSnake()
     {
-        // this.player.MoveSnake();
-        // this.astar.MoveSnake();
+        this.player.MoveSnake();
+        this.astar.MoveSnake();
         this.nn.MoveSnake();
-        // this.bt.MoveSnake();
+        this.bt.MoveSnake();
     }
 }

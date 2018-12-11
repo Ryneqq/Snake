@@ -32,10 +32,26 @@ public class NN : MonoBehaviour {
     }
 
     private void CreateNeuralNetwork() {
-        int[] layers = {7, 7, 2};
+        var layers = GenerateLayers();
         nn = new NeuralNetwork(layers);
 
         // Learn();
+    }
+
+    private int[] GenerateLayers() {
+        var rand = new System.Random();
+        var lsl = rand.Next(2,4);
+
+        int[] layers = new int[lsl+1];
+
+        layers[0] = 7;
+        for (int i = 1; i < lsl; i++)
+        {
+            layers[i] = rand.Next(4,10);
+        }
+        layers[lsl] = 2;
+
+        return layers;
     }
 
     private void LoadNeuralNetwork() {
@@ -116,13 +132,14 @@ public class NN : MonoBehaviour {
 
     private void TryLearn(Matrix perception)
     {
-        if (this.learn)
+        var btreeAnwser = this.GetRightAnwser();
+        if (this.learn && !this.nn.Test(perception, btreeAnwser))
         {
-            var btreeAnwser = this.GetRightAnwser();
             var nnAnwser    = this.nn.Run(perception);
             Debug.Log("btree: " + btreeAnwser[0,0] + " " + btreeAnwser[1,0]);
             Debug.Log("nn : " + nnAnwser[0,0] + " " + nnAnwser[1,0]);
-            for (int i = 0; i < 100 * 100 && !this.nn.Learn(perception, btreeAnwser); i++);
+            // this.nn.Learn(perception, btreeAnwser);
+            for (int i = 0; i < 20 && !this.nn.Learn(perception, btreeAnwser); i++);
             nn.SaveNeuralNetwork();
         }
     }

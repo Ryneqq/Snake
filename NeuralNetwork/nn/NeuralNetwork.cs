@@ -8,6 +8,7 @@ namespace NeuralNetwork {
         private readonly Matrix[] nn;
         private float step, momentum = 1.0f, learningRate = 0.05f;
         public int fitness = 0;
+        public int errors = 0;
 
         public NeuralNetwork(Matrix[] nn)
         {
@@ -132,13 +133,13 @@ namespace NeuralNetwork {
             // return true;
 
             this.momentum = 1.0f;
-            this.Learn(learningQuestions, learningAnwsers, 100 * 100 * 100);
+            this.Learn(learningQuestions, learningAnwsers, 100 * 100);
             return this.Test(testQuestions, testAnwsers);
         }
 
         bool Test(Matrix questions, Matrix anwsers)
         {
-            var errors   = 0;
+            this.errors  = 0;
             var margin   = 0.25;
             var examples = questions.cols;
 
@@ -159,7 +160,15 @@ namespace NeuralNetwork {
             }
 
             Console.WriteLine(string.Concat("Errors: ", errors, "/", examples));
-            this.fitness = 100 - errors * 100 / examples;
+            if (errors < 700)
+            { 
+                var conf = "c";
+                foreach (var layer in this.nn)
+                    conf += layer.cols;
+
+                this.SaveNeuralNetwork("nn_" + "e" + errors + conf);
+            }
+            this.fitness = 100 - (int)((double)(errors * 100) / (double)examples);
 
             if (errors > examples * margin)
                 return false;

@@ -7,16 +7,19 @@ using UnityEngine;
 public class NeuralNetwork {
     private Matrix[] nn;
     private int beta = 5;
+    float learningRate = 0.1f;
+    float momentum = 0.999f;
 
     NeuralNetwork() {}
+
     public NeuralNetwork(int[] layers)
     {
         var lsl = layers.Length - 1;
         this.nn = new Matrix[lsl];
 
-        for(int i = 0, n = 0; n < lsl; i++, n++)
+        for(int i = 0; i < lsl; i++)
         {
-            this.nn[n] = Matrix.RandomMatrix(layers[i] + 1, layers[i + 1], 100);
+            this.nn[i] = Matrix.RandomMatrix(layers[i] + 1, layers[i + 1], 100);
         }
     }
 
@@ -55,7 +58,7 @@ public class NeuralNetwork {
 
     void BackPropagation(Matrix[] signals, Matrix delta, int layers) {
         Matrix signal;
-        float learningRate = .05f; // learning rate
+        // this.learningRate *= momentum;
 
         for(int i = layers; i > 0; i--) {
             signal = signals[i];
@@ -98,37 +101,36 @@ public class NeuralNetwork {
         return Test(signal, anwser);
     }
 
-        bool Test(Matrix question, Matrix anwser)
+    public bool Test(Matrix question, Matrix anwser)
+    {
+        var margin = 0.45;
+        var result = this.Run(question);
+        var actual = result - anwser;
+
+        foreach(var a in actual.mat)
         {
-            var margin = 0.5;
-            var result = this.Run(question);
-
-            // var actual = result - anwser;
-
-            // foreach(var a in actual.mat)
-            // {
-            //     if(Math.Abs(a) > margin)
-            //     {
-            //         return false;
-            //     }
-            // }
-
-            for (int i = 0; i < result.rows; i++)
+            if(Math.Abs(a) > margin)
             {
-                for (int j = 0; j < result.cols; j++)
-                {
-                    if(result[i,j] > margin)
-                        result[i,j] = 1;
-                    if(result[i,j] <= margin)
-                        result[i,j] = 0;
-
-                    if(result[i,j] != anwser[i,j])
-                        return false;
-                }
+                return false;
             }
-
-            return true;
         }
+
+        // for (int i = 0; i < result.rows; i++)
+        // {
+        //     for (int j = 0; j < result.cols; j++)
+        //     {
+        //         if(result[i,j] > margin)
+        //             result[i,j] = 1.1;
+        //         if(result[i,j] <= margin)
+        //             result[i,j] = 0.1;
+
+        //         if((int)result[i,j] != (int)(anwser[i,j]+0.1))
+        //             return false;
+        //     }
+        // }
+
+        return true;
+    }
 
     Matrix Run(Matrix signal, int index) {
         Matrix X = AddBias(signal);

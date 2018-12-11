@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 namespace NeuralNetwork {
     public class Evolution {
         List<NeuralNetwork> population;
-        int qunatity = 100;
-        int generations = 100;
-        int mutationRate = 10;
+        int qunatity = 1000;
+        int generations = 10;
+        int mutationRate = 1;
 
         public Evolution()
         {
@@ -55,7 +55,7 @@ namespace NeuralNetwork {
                     }
                 }
 
-                this.population.Add(organism);
+                this.population.Add(new NeuralNetwork(network));
             }
         }
 
@@ -79,6 +79,9 @@ namespace NeuralNetwork {
             var rand = new Random();
 
             this.SortPopulation();
+            Console.WriteLine();
+            Console.WriteLine("Best nn fitness: " + this.population[0].fitness + " errors: " + this.population[0].errors);
+            Console.WriteLine("Worst nn fitness: " + this.population[this.qunatity - 1].fitness + " errors: " + this.population[this.qunatity - 1].errors);
 
             foreach (var nn in this.population)
             {
@@ -115,14 +118,14 @@ namespace NeuralNetwork {
 
         private int[] GenerateLayers() {
             var rand = new Random();
-            var lsl = rand.Next(3,7);
+            var lsl = rand.Next(2,4);
 
             int[] layers = new int[lsl+1];
 
-            layers[0] = 10;
+            layers[0] = 7;
             for (int i = 1; i < lsl; i++)
             {
-                layers[i] = rand.Next(4,17);
+                layers[i] = rand.Next(4,10);
             }
             layers[lsl] = 2;
 

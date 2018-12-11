@@ -158,7 +158,7 @@ public class Pathfinder {
         int distanceX = Math.Abs(from.x - to.x);
         int distanceY = Math.Abs(from.y - to.y);
 
-        return (distanceX + distanceY) * 10;
+        return distanceX + distanceY;
     }
 
     private bool IsEmpty()

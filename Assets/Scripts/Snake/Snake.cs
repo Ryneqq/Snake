@@ -5,10 +5,11 @@ using UnityEngine;
 
 public class Snake : MonoBehaviour {
     public Transform tailPrefab;
+    public Color color;
     public Food food;
     public int x,y;
     public int length;
-    public Color color;
+
     List<Field> tail;
     List<Transform> tailTransforms;
     Map.Side dir;
@@ -52,8 +53,8 @@ public class Snake : MonoBehaviour {
         var last = tail.Last();
 
         if(!next.IsWalkable()){
-            // Destroy(this.gameObject);
-            // Debug.Log("dead");
+            // Die();
+            Debug.Log("dead");
             return;
         }
 
@@ -65,6 +66,14 @@ public class Snake : MonoBehaviour {
             last.ChangeField(Map.Fields.empty);
             Slither(next);
         }
+    }
+
+    private void Die() {
+        foreach (var field in tail) {
+            field.ChangeField(Map.Fields.empty);
+        }
+
+        Destroy(this.gameObject);
     }
 
     public Field Head(){

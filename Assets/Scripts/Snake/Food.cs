@@ -22,7 +22,7 @@ public class Food : MonoBehaviour {
         return Map.map[x,y].pos;
     }
 
-    private void Spawn () {
+    private void Spawn() {
         food = Instantiate(foodPrefab, FindEmptyField(), Quaternion.identity);
         food.transform.SetParent(GetComponent<Transform>(), false);
         food.GetComponent<SpriteRenderer>().color = Color.green;
