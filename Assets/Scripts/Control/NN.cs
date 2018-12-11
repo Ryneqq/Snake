@@ -20,15 +20,13 @@ public class NN : MonoBehaviour {
         this.snake = GetComponent<Snake>();
         perception = new Perception(this.snake);
         btree = new BehavioralTree();
-        CreateNeuralNetwork();
+        // CreateNeuralNetwork();
         // LoadNeuralNetwork();
 
-        // if(create)
-        //     CreateNeuralNetwork();
-        // else
-        //     LoadNeuralNetwork();
-
-        // InvokeRepeating("Steer", 0.5f, 0.5f);
+        if(create)
+            CreateNeuralNetwork();
+        else
+            LoadNeuralNetwork();
     }
 
     private void CreateNeuralNetwork() {

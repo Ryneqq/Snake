@@ -63,7 +63,7 @@ public class NeuralNetwork {
         for(int i = layers; i > 0; i--) {
             signal = signals[i];
             if(signal.rows > delta.rows)
-                signal = RemoveBias(signal); // remove bias if needed
+                signal = RemoveBias(signal);
 
             Matrix error = FindError(signal, delta);
 

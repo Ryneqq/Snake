@@ -11,8 +11,6 @@ public class Astar : MonoBehaviour {
     {
         this.snake = GetComponent<Snake>();
         this.pathfinder = new Pathfinder();
-        // InvokeRepeating("MoveSnake", 0.1f, 0.1f);
-        // InvokeRepeating("MoveSnake", 0.3f, 0.3f);
     }
 
     public void MoveSnake()

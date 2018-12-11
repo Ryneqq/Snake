@@ -3,13 +3,12 @@
 public class Player : MonoBehaviour {
     Snake snake;
     bool gotInput = false;
-    AvaibleSides upAndDown = new AvaibleSides(Map.Side.up,    Map.Side.down);
+    AvaibleSides upAndDown = new AvaibleSides(Map.Side.up, Map.Side.down);
     AvaibleSides rightAndLeft = new AvaibleSides(Map.Side.right, Map.Side.left);
 
     void Start ()
     {
         this.snake = GetComponent<Snake>();
-        // InvokeRepeating("MoveSnake", 0.3f, 0.3f);
     }
 
     void Update ()
